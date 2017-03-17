@@ -12,38 +12,42 @@ Mutilate images online with <a href="http://jkirchartz.com/Glitchy3bitdither/Gli
 <p>Heavily modified by JKirchartz, <a href="https://github.com/jkirchartz/Glitchy3bitdither">code on github</a></p>
 <p>Experimental functions may not be 100% stable, this is a work in progress.</p>
 
-##Sample Code
+## Sample Code
 
-    // setup canvas
-    var canvas = document.createElement('canvas');
-    canvas.width = 500;
-    canvas.height = 500;
-    var ctx = canvas.getContext('2d');
+```javascript
+// setup canvas
+var canvas = document.createElement('canvas');
+canvas.width = 500;
+canvas.height = 500;
+var ctx = canvas.getContext('2d');
 
-    // draw some red circles with black outlines
-    for (var i = 0; i < 12; i++) {
-        var centerX = Math.floor(Math.random() * 500) + 10;
-        var centerY = Math.floor(Math.random() * 500) + 10;
-        var radius = Math.floor(Math.random() * 50) + 20;
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-        ctx.fillStyle = "#ff0000";
-        ctx.fill();
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "#000000";
-        ctx.stroke();
-    }
-    // get data
-    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    // apply a corruption to an image
-    ctx.putImageData(glitch(imageData), 0, 0);
-    var out = document.createElement('img');
-    // send output to img element on the page
-    out.src = canvas.toDataURL("image/png");
-    document.body.appendChild(out);
+// draw some red circles with black outlines
+for (var i = 0; i < 12; i++) {
+    var centerX = Math.floor(Math.random() * 500) + 10;
+    var centerY = Math.floor(Math.random() * 500) + 10;
+    var radius = Math.floor(Math.random() * 50) + 20;
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+    ctx.fillStyle = "#ff0000";
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#000000";
+    ctx.stroke();
+}
 
+// get data
+var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+// apply a corruption to an image
+ctx.putImageData(glitch(imageData), 0, 0);
 
-##todo:
+// send output to img element on the page
+var out = document.createElement('img');
+out.src = canvas.toDataURL("image/png");
+document.body.appendChild(out);
+```
+
+## todo:
+
 1. optimize code w/ better code from the row-sorting algos
 2. web workers
 3. namespace
@@ -57,7 +61,8 @@ Mutilate images online with <a href="http://jkirchartz.com/Glitchy3bitdither/Gli
 8. nodejs/cli - for batch/bots/etc. (via [CamanJS](http://camanjs.com/))
 
 
-##run locally
+## Run locally
+
 The demo site in this repo is a [Jekyll](http://jekyllrb.com) project, to run locally install the gem &amp; run `jekyll --serve`.
 You can also use the `--auto` flag to make jekyll automatically update the site as files change.
 
@@ -65,5 +70,5 @@ portions under the included MIT license, copyright 2013 Matthew Nolan Caudill, a
 99% of the rest copyleft 2013 JKirchartz, except as noted.
 
 ## I am open to any and all Pull Requests
-so... hack away! huzzah!
 
+so... hack away! huzzah!
