@@ -54,19 +54,21 @@ document.body.appendChild(out);
 4. better function names
 5. better comments
 6. add paremeters for granular control - but use randomness as default functionality if no params are used
-7. Add Glitches:
-  * scan lines (1px black line the entire width every N lines)
-  * move each "row" in opposite directions (1px at a time)
-  * kaleidoscope
+7. Add glitches:
+  - scan lines (1px black line the entire width every N lines)
+  - move each "row" in opposite directions (1px at a time)
+  - kaleidoscope
 8. nodejs/cli - for batch/bots/etc. (via [CamanJS](http://camanjs.com/))
 
 
 ## Run locally
 
-The demo site in this repo is a [Jekyll](http://jekyllrb.com) project, to run locally install the gem &amp; run `jekyll --serve`.
-You can also use the `--auto` flag to make jekyll automatically update the site as files change.
+The demo site in this repo is a [Jekyll](http://jekyllrb.com) project. To run locally install the gem &amp; run `jekyll --serve`.
 
-portions under the included MIT license, copyright 2013 Matthew Nolan Caudill, as noted.
+You can also use the `--auto` flag to make Jekyll automatically update the site as files change.
+
+Portions under the included MIT license, copyright 2013 Matthew Nolan Caudill, as noted.
+
 99% of the rest copyleft 2013 JKirchartz, except as noted.
 
 ## I am open to any and all Pull Requests
