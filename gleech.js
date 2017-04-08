@@ -1,10 +1,19 @@
 /*
- * Jimp.prototype.js
+ * Gleech.js
  * Copyright (C) 2017 jkirchartz <me@jkirchartz.com>
+ *
+ * Extend JIMP with glitches
  *
  * Distributed under terms of the NPL (Necessary Public License) license.
  */
 var Jimp = require('jimp');
+
+function isNodePattern(cb) {
+      if ("undefined" == typeof cb) return false;
+      if ("function" != typeof cb)
+            throw new Error("Callback must be a function");
+      return true;
+}
 
 Jimp.prototype.dither8Bit = function dither8Bit(size, cb) {
         if ("number" != typeof size)

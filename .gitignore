@@ -3,3 +3,4 @@ lib
 node_modules/
 .jekyll-metadata
 npm-debug.log
+*.jpg

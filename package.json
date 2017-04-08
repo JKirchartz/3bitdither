@@ -8,7 +8,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "jhint gleech.js",
+    "test": "node test.js",
     "deploy": "git subtree push --prefix site origin gh-pages"
   },
   "repository": {

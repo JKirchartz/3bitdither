@@ -8,9 +8,6 @@ var gleech = require("./gleech.js");
 
 gleech.read("test.jpg", function (err, img) {
         if (err) throw err;
-        img.resize(256, 256)
-           .quality(60)
-           .greyscale()
+        img.dither8Bit(60)
            .write("test_sm.jpg");
-
 });
