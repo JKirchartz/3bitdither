@@ -121,6 +121,11 @@ function isNodePattern(cb) {
       return true;
 }
 
+
+/**
+ * Dither: 8 bits
+ * @param {number} size - a number greater than 1 representing pixel size.
+ */
 Jimp.prototype.dither8Bit = function dither8Bit(size, cb) {
         if (!nullOrUndefined(size)) {
           if ("number" != typeof size)
@@ -166,6 +171,9 @@ Jimp.prototype.dither8Bit = function dither8Bit(size, cb) {
         else return this;
 };
 
+/**
+ * Dither: Halftone
+ */
 Jimp.prototype.ditherHalftone = function ditherHalftone(cb) {
         var width = this.bitmap.width,
                 height = this.bitmap.height,
@@ -244,6 +252,9 @@ Jimp.prototype.ditherHalftone = function ditherHalftone(cb) {
         else return this;
 };
 
+/**
+ * Dither: Atkinsons
+ */
 Jimp.prototype.ditherAtkinsons = function ditherAtkinsons(cb) {
         var width = this.bitmap.width,
                 height = this.bitmap.height,
@@ -305,6 +316,9 @@ Jimp.prototype.ditherAtkinsons = function ditherAtkinsons(cb) {
         else return this;
 };
 
+/**
+ * Dither: Floyd-Steinberg
+ */
 Jimp.prototype.ditherFloydSteinberg = function ditherFloydSteinberg(cb) {
         var width = this.bitmap.width,
                 height = this.bitmap.height,
@@ -357,6 +371,10 @@ Jimp.prototype.ditherFloydSteinberg = function ditherFloydSteinberg(cb) {
         else return this;
 };
 
+/**
+ * Dither: Bayer
+ * @param {number} map - which matrix to use for the threshold map - 0: 3x3,  1: 4x4, 2: 8x8
+ */
 Jimp.prototype.ditherBayer = function ditherBayer(map, cb) {
         if (!nullOrUndefined(map)) {
           if ("number" != typeof map)
@@ -408,6 +426,10 @@ Jimp.prototype.ditherBayer = function ditherBayer(map, cb) {
         else return this;
 };
 
+/**
+ * Dither: Bayer 3 - full-color bayer algo
+ * @param {number} map - which matrix to use for the threshold map - 0: 3x3,  1: 4x4, 2: 8x8
+ */
 Jimp.prototype.ditherBayer3 = function ditherBayer3(map, cb) {
         if (!nullOrUndefined(map)) {
           if ("number" != typeof map)
@@ -461,6 +483,9 @@ Jimp.prototype.ditherBayer3 = function ditherBayer3(map, cb) {
         else return this;
 };
 
+/**
+ * Dither: Random - dither according to noise
+ */
 Jimp.prototype.ditherRandom = function ditherRandom(cb) {
         var width = this.bitmap.width,
                 height = this.bitmap.height,
@@ -476,6 +501,9 @@ Jimp.prototype.ditherRandom = function ditherRandom(cb) {
 
 };
 
+/**
+ * Dither: Random 3 - full color dithering via noise
+ */
 Jimp.prototype.ditherRandom3 = function ditherRandom3(cb) {
         var width = this.bitmap.width,
                 height = this.bitmap.height,
@@ -491,12 +519,16 @@ Jimp.prototype.ditherRandom3 = function ditherRandom3(cb) {
         else return this;
 };
 
+/**
+ * Dither: Bitmask
+ * @param {number} mask - number with which to mask each color channel 1-254
+ */
 Jimp.prototype.ditherBitmask = function ditherBitmask(mask, cb) {
         if (!nullOrUndefined(mask)) {
           if ("number" != typeof mask)
-                  return throwError.call(this, "map must be a number", cb);
+                  return throwError.call(this, "mask must be a number", cb);
           if (mask < 0 || mask > 254)
-                  return throwError.call(this, "map must be a number from 0 to 2", cb);
+                  return throwError.call(this, "mask must be a number from 0 to 2", cb);
         }
         var width = this.bitmap.width,
                 height = this.bitmap.height,
@@ -540,6 +572,11 @@ Jimp.prototype.functionName = function functionName() {
 */
 
 // todo: rewrite colorShift functions to match Jimp.prototype.sepia
+
+/**
+ * Color Shift
+ * @param {boolean} dir - direction to shift colors, true for RGB->GBR, false for RGB->BRG.
+ */
 Jimp.prototype.colorShift = function colorShift(dir, cb) {
         if (!nullOrUndefined(dir))
                 return throwError.call(this, "dir must be truthy or falsey", cb);
@@ -585,6 +622,10 @@ Jimp.prototype.colorShift2 = function colorShift2(dir, cb) {
 */
 
 
+/**
+ * Green Shift
+ * @param {number} factor - factor by which to reduce red and blue channels and boost green channel
+ */
 Jimp.prototype.greenShift = function greenShift(factor, cb) {
         if (!nullOrUndefined(factor)) {
           if ("number" != typeof factor)
@@ -607,6 +648,10 @@ Jimp.prototype.greenShift = function greenShift(factor, cb) {
         else return this;
 };
 
+/**
+ * Red Shift
+ * @param {number} factor - factor by which to reduce green and blue channels and boost red channel
+ */
 Jimp.prototype.redShift = function redShift(factor, cb) {
         if (!nullOrUndefined(factor)) {
           if ("number" != typeof factor)
@@ -629,6 +674,10 @@ Jimp.prototype.redShift = function redShift(factor, cb) {
         else return this;
 };
 
+/**
+ * Blue Shift
+ * @param {number} factor - factor by which to reduce red and green channels and boost blue channel
+ */
 Jimp.prototype.blueShift = function blueShift(factor, cb) {
         if (!nullOrUndefined(factor)) {
           if ("number" != typeof factor)
@@ -652,6 +701,12 @@ Jimp.prototype.blueShift = function blueShift(factor, cb) {
 };
 
 
+/**
+ * RGB Shift
+ * @param {string} from - channel to shift color value from, 'r', 'g', or 'b'
+ * @param {string} to - channel to shift color value to, 'r', 'g', or 'b'
+ * @param {number} factor - factor by which to reduce other channels and boost the channel set by to
+ */
 Jimp.prototype.rgbShift = function rgbShift(from, to, factor, cb) {
         if (!nullOrUndefined(from)) {
           if ("string" != typeof from)
@@ -731,6 +786,11 @@ Jimp.prototype.rgbShift = function rgbShift(from, to, factor, cb) {
         else return this;
 };
 
+/**
+ * Super Shift
+ * @param {number} iter - number of times to shift color values
+ * @param {boolean} dir - direction to shift colors, true for RGB->GBR, false for RGB->BRG.
+ */
 Jimp.prototype.superShift = function superShift(iter, dir, cb) {
         if (!nullOrUndefined(iter)) {
           if ("number" != typeof iter)
@@ -760,7 +820,10 @@ Jimp.prototype.superShift = function superShift(iter, dir, cb) {
         else return this;
 };
 
-// TODO: create test functions for the following functions:
+/**
+ * Super Pixel Funk
+ * @param {number} pixelation - size of pixels to use for pixelization
+ */
 Jimp.prototype.superPixelFunk = function superPixelFunk(pixelation, cb) {
         if (!nullOrUndefined(pixelation)) {
           if ("number" != typeof pixelation)
@@ -795,6 +858,10 @@ Jimp.prototype.superPixelFunk = function superPixelFunk(pixelation, cb) {
         else return this;
 };
 
+/**
+ * Pixel Funk
+ * @param {number} pixelation - size of pixels to use for pixelization
+ */
 Jimp.prototype.pixelFunk = function pixelFunk(pixelation, cb) {
         if (!nullOrUndefined(pixelation)) {
           if ("number" != typeof pixelation)
@@ -826,6 +893,10 @@ Jimp.prototype.pixelFunk = function pixelFunk(pixelation, cb) {
         else return this;
 };
 
+/**
+ * Focus Image
+ * @param {number} pixelation - size of pixels to use for pixelization
+ */
 Jimp.prototype.focusImage = function focusImage(pixelation, cb) {
         if (!nullOrUndefined(pixelation)) {
           if ("number" != typeof pixelation)
@@ -855,6 +926,12 @@ Jimp.prototype.focusImage = function focusImage(pixelation, cb) {
         else return this;
 };
 
+
+/**
+ * Slice
+ * @param {number} cutstart - datapoint to begin cut
+ * @param {number} cutend - datapoint to finalize cut
+ */
 Jimp.prototype.slice = function slice(cutstart, cutend, cb) {
         if (!nullOrUndefined(cutstart)) {
           if ("number" != typeof cutstart)
@@ -879,6 +956,11 @@ Jimp.prototype.slice = function slice(cutstart, cutend, cb) {
         if (isNodePattern(cb)) return cb.call(this, null, this);
         else return this;
 };
+
+/**
+ * Select Slice
+ * @param {number} selection - Algorithm to use to make an automatic slice (currently 0 or 1)
+ */
 Jimp.prototype.selectSlice = function selectSlice(selection, cb) {
         if (!nullOrUndefined(selection)) {
           if ("number" != typeof selection)
@@ -910,6 +992,10 @@ Jimp.prototype.selectSlice = function selectSlice(selection, cb) {
 };
 
 
+/**
+ * Super Slice
+ * @param {number} iter - Number of times to perform an automatic slice
+ */
 Jimp.prototype.superSlice = function superSlice(iter, cb) {
         if (!nullOrUndefined(iter)) {
           if ("number" != typeof iter)
@@ -942,6 +1028,11 @@ Jimp.prototype.superSlice = function superSlice(iter, cb) {
 };
 
 
+/**
+ * Fractal Ghosts
+ * @param {number} type - A number from 0-3 determining which algorithm to use
+ * @param {number} color - The color channel to use to create the ghosts
+ */
 Jimp.prototype.fractalGhosts = function fractalGhosts(type, color, cb) {
         if(!nullOrUndefined(type)) {
           if (typeof type != 'number')
@@ -1007,6 +1098,10 @@ Jimp.prototype.fractalGhosts = function fractalGhosts(type, color, cb) {
 };
 
 
+/**
+ * Fractal
+ * @param {number} type - A number from (currently 0 or 1) determining which algorithm to use
+ */
 Jimp.prototype.fractal = function fractal(type, cb) {
         if(!nullOrUndefined(type)) {
           if (typeof type != 'number')
