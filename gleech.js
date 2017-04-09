@@ -8,7 +8,113 @@
  */
 var Jimp = require('jimp');
 
+  /***************************************************
+   * Helper Functions
+   ***************************************************/
+
+  function adjustPixelError(data, i, error, multiplier) {
+    data[i] = data[i] + multiplier * error[0];
+    data[i + 1] = data[i + 1] + multiplier * error[1];
+    data[i + 2] = data[i + 2] + multiplier * error[2];
+  }
+
+  function nullOrUndefined(item) {
+    if (typeof item !== 'undefined' || item == null) {
+      return true;
+    }
+    return false;
+  }
+
+  // return random # < a
+  function randFloor(a) {return Math.floor(Math.random() * a);}
+  // return random # <= a
+  function randRound(a) {return Math.round(Math.random() * a);}
+  // return random # between A & B
+  function randRange(a, b) {return Math.round(Math.random() * b) + a;}
+  // relatively fair 50/50
+  function coinToss() {return Math.random() > 0.5;}
+  function randMinMax(min, max) {
+    // generate min & max values by picking
+    // one 'fairly', then picking another from the remainder
+    var randA = Math.round(randRange(min, max));
+    var randB = Math.round(randRange(randA, max));
+    return [randA, randB];
+  }
+  function randMinMax2(min, max) {
+    // generate min & max values by picking both fairly
+    // then returning the lesser value before the greater.
+    var randA = Math.round(randRange(min, max));
+    var randB = Math.round(randRange(min, max));
+    return randA < randB ? [randA, randB] : [randB, randA];
+  }
+  function randChoice(arr) {
+    return arr[randFloor(arr.length)];
+  }
+
+  function randChance(percent) {
+    // percent is a number 1-100
+    return (Math.random() < (percent / 100));
+  }
+
+  function sum(o) {
+    for (var s = 0, i = o.length; i; s += o[--i]) {}
+    return s;
+  }
+  function leftSort(a, b) {return parseInt(a, 10) - parseInt(b, 10);}
+  function rightSort(a, b) {return parseInt(b, 10) - parseInt(a, 10);}
+  function blueSort(a, b) {
+    var aa = a >> 24 & 0xFF,
+      ar = a >> 16 & 0xFF,
+      ag = a >> 8 & 0xFF,
+      ab = a & 0xFF;
+    var ba = b >> 24 & 0xFF,
+      br = b >> 16 & 0xFF,
+      bg = b >> 8 & 0xFF,
+      bb = b & 0xFF;
+    return aa - bb;
+  }
+  function redSort(a, b) {
+    var aa = a >> 24 & 0xFF,
+      ar = a >> 16 & 0xFF,
+      ag = a >> 8 & 0xFF,
+      ab = a & 0xFF;
+    var ba = b >> 24 & 0xFF,
+      br = b >> 16 & 0xFF,
+      bg = b >> 8 & 0xFF,
+      bb = b & 0xFF;
+    return ar - br;
+  }
+  function greenSort(a, b) {
+    var aa = a >> 24 & 0xFF,
+      ar = a >> 16 & 0xFF,
+      ag = a >> 8 & 0xFF,
+      ab = a & 0xFF;
+    var ba = b >> 24 & 0xFF,
+      br = b >> 16 & 0xFF,
+      bg = b >> 8 & 0xFF,
+      bb = b & 0xFF;
+    return ag - bg;
+  }
+  function avgSort(a, b) {
+    var aa = a >> 24 & 0xFF,
+      ar = a >> 16 & 0xFF,
+      ag = a >> 8 & 0xFF,
+      ab = a & 0xFF;
+    var ba = b >> 24 & 0xFF,
+      br = b >> 16 & 0xFF,
+      bg = b >> 8 & 0xFF,
+      bb = b & 0xFF;
+    return ((aa + ar + ag + ab) / 4) - ((ba + br + bg + bb) / 4);
+  }
+  function randSort(a, b) {
+    var sort = randChoice([coinToss, leftSort, rightSort, redSort, greenSort,
+                          blueSort, avgSort]);
+    return sort(a, b);
+  }
+
+
 function isNodePattern(cb) {
+  // borrowed from JIMP
       if ("undefined" == typeof cb) return false;
       if ("function" != typeof cb)
             throw new Error("Callback must be a function");
@@ -16,13 +122,16 @@ function isNodePattern(cb) {
 }
 
 Jimp.prototype.dither8Bit = function dither8Bit(size, cb) {
-        if ("number" != typeof size)
-                return throwError.call(this, "size must be a number", cb);
-        if (size < 2)
-                return throwError.call(this, "size must be greater than 1", cb);
+        if (!nullOrUndefined(size)) {
+          if ("number" != typeof size)
+                  return throwError.call(this, "size must be a number", cb);
+          if (size < 2)
+                  return throwError.call(this, "size must be greater than 1", cb);
+        }
         var width = this.bitmap.width,
                 height = this.bitmap.height,
                 data = this.bitmap.data,
+                size = !nullOrUndefined(size) ? size : 4,
                 sum_r, sum_g, sum_b, avg_r, avg_g, avg_b;
 
         for (var y = 0; y < height; y += size) {
@@ -57,7 +166,7 @@ Jimp.prototype.dither8Bit = function dither8Bit(size, cb) {
         else return this;
 };
 
-Jimp.prototype.ditherHalftone = function ditherHalftone() {
+Jimp.prototype.ditherHalftone = function ditherHalftone(cb) {
         var width = this.bitmap.width,
                 height = this.bitmap.height,
                 data = this.bitmap.data;
@@ -135,7 +244,7 @@ Jimp.prototype.ditherHalftone = function ditherHalftone() {
         else return this;
 };
 
-Jimp.prototype.ditherAtkinsons = function ditherAtkinsons() {
+Jimp.prototype.ditherAtkinsons = function ditherAtkinsons(cb) {
         var width = this.bitmap.width,
                 height = this.bitmap.height,
                 data = this.bitmap.data;
@@ -196,7 +305,7 @@ Jimp.prototype.ditherAtkinsons = function ditherAtkinsons() {
         else return this;
 };
 
-Jimp.prototype.ditherFloydSteinberg = function ditherFloydSteinberg() {
+Jimp.prototype.ditherFloydSteinberg = function ditherFloydSteinberg(cb) {
         var width = this.bitmap.width,
                 height = this.bitmap.height,
                 data = this.bitmap.data;
@@ -248,7 +357,13 @@ Jimp.prototype.ditherFloydSteinberg = function ditherFloydSteinberg() {
         else return this;
 };
 
-Jimp.prototype.ditherBayer = function ditherBayer() {
+Jimp.prototype.ditherBayer = function ditherBayer(map, cb) {
+        if (!nullOrUndefined(map)) {
+          if ("number" != typeof map)
+                  return throwError.call(this, "map must be a number", cb);
+          if (map < 0 || map > 2)
+                  return throwError.call(this, "map must be a number from 0 to 2", cb);
+        }
         var width = this.bitmap.width,
                 height = this.bitmap.height,
                 data = this.bitmap.data,
@@ -276,7 +391,7 @@ Jimp.prototype.ditherBayer = function ditherBayer() {
                                 [43, 27, 39, 23, 42, 26, 38, 22]
                         ]
                 ],
-                threshold_map = threshold_maps[randFloor(threshold_maps.length)],
+                threshold_map = !nullOrUndefined(map) ? threshold_maps[map] : threshold_maps[randFloor(threshold_maps.length)],
                 size = threshold_map.length;
         for (var y = 0; y < height; y++) {
                 for (var x = 0; x < width; x++) {
@@ -293,7 +408,13 @@ Jimp.prototype.ditherBayer = function ditherBayer() {
         else return this;
 };
 
-Jimp.prototype.ditherBayer3 = function ditherBayer3() {
+Jimp.prototype.ditherBayer3 = function ditherBayer3(map, cb) {
+        if (!nullOrUndefined(map)) {
+          if ("number" != typeof map)
+                  return throwError.call(this, "map must be a number", cb);
+          if (map < 0 || map > 2)
+                  return throwError.call(this, "map must be a number from 0 to 2", cb);
+        }
         var width = this.bitmap.width,
                 height = this.bitmap.height,
                 data = this.bitmap.data,
@@ -321,7 +442,7 @@ Jimp.prototype.ditherBayer3 = function ditherBayer3() {
                                 [43, 27, 39, 23, 42, 26, 38, 22]
                         ]
                 ],
-                threshold_map = threshold_maps[randFloor(threshold_maps.length)],
+                threshold_map = !nullOrUndefined(map) ? threshold_maps[map] : threshold_maps[randFloor(threshold_maps.length)],
                 size = threshold_map.length;
         for (var y = 0; y < height; y++) {
                 for (var x = 0; x < width; x++) {
@@ -340,7 +461,7 @@ Jimp.prototype.ditherBayer3 = function ditherBayer3() {
         else return this;
 };
 
-Jimp.prototype.ditherRandom = function ditherRandom() {
+Jimp.prototype.ditherRandom = function ditherRandom(cb) {
         var width = this.bitmap.width,
                 height = this.bitmap.height,
                 data = this.bitmap.data;
@@ -355,7 +476,7 @@ Jimp.prototype.ditherRandom = function ditherRandom() {
 
 };
 
-Jimp.prototype.ditherRandom3 = function ditherRandom3() {
+Jimp.prototype.ditherRandom3 = function ditherRandom3(cb) {
         var width = this.bitmap.width,
                 height = this.bitmap.height,
                 data = this.bitmap.data;
@@ -370,11 +491,17 @@ Jimp.prototype.ditherRandom3 = function ditherRandom3() {
         else return this;
 };
 
-Jimp.prototype.ditherBitmask = function ditherBitmask() {
+Jimp.prototype.ditherBitmask = function ditherBitmask(mask, cb) {
+        if (!nullOrUndefined(mask)) {
+          if ("number" != typeof mask)
+                  return throwError.call(this, "map must be a number", cb);
+          if (mask < 0 || mask > 254)
+                  return throwError.call(this, "map must be a number from 0 to 2", cb);
+        }
         var width = this.bitmap.width,
                 height = this.bitmap.height,
                 data = this.bitmap.data,
-                M = randRange(1, 125);
+                M = !nullOrUndefined(mask) ? mask : randRange(1, 125);
         // 0xc0; 2 bits
         // 0xe0  3 bits
         // 0xf0  4 bits
@@ -391,5 +518,166 @@ Jimp.prototype.ditherBitmask = function ditherBitmask() {
         if (isNodePattern(cb)) return cb.call(this, null, this);
         else return this;
 };
+
+/* jimp snippet
+
+Jimp.prototype.functionName = function functionName() {
+        var width = this.bitmap.width,
+                height = this.bitmap.height,
+                data = this.bitmap.data;
+        // your code here
+        this.bitmap.data = new Buffer(data);
+        if (isNodePattern(cb)) return cb.call(this, null, this);
+        else return this;
+};
+
+  gleech.superShift = function superShift(imageData) {
+    for (var i = 0, l = randRange(1, 10); i < l; i++) {
+      imageData = gleech.colorShift(imageData);
+    }
+    return imageData;
+  };
+*/
+
+// todo: rewrite colorShift functions to match Jimp.prototype.sepia
+Jimp.prototype.colorShift = function colorShift(dir, cb) {
+        if (!nullOrUndefined(dir))
+                return throwError.call(this, "dir must be truthy or falsey", cb);
+        var width = this.bitmap.width,
+            height = this.bitmap.height,
+            data = this.bitmap.data,
+            dir = !nullOrUndefined(dir) ? dir : coinToss();
+        for (var i = 0, size = width * height * 4; i < size; i += 4) {
+          var r = data[i],
+              g = data[i + 1],
+              b = data[i + 2];
+          data[i] = dir ? g : b;
+          data[i + 1] = dir ? b : r;
+          data[i + 2] = dir ? r : g;
+        }
+        this.bitmap.data = new Buffer(data);
+        if (isNodePattern(cb)) return cb.call(this, null, this);
+        else return this;
+};
+
+Jimp.prototype.colorShift2 = function colorShift2(dir, cb) {
+        if (!nullOrUndefined(dir))
+                return throwError.call(this, "dir must be truthy or falsey", cb);
+        var width = this.bitmap.width,
+            height = this.bitmap.height,
+            data = this.bitmap.data,
+            dir = !nullOrUndefined(dir) ? dir : coinToss();
+        for (var i = 0, size = data.length; i < size; i++) {
+          var a = data[i] >> 24 & 0xFF,
+              r = data[i] >> 16 & 0xFF,
+              g = data[i] >> 8 & 0xFF,
+              b = data[i] & 0xFF;
+          r = (dir ? g : b) & 0xFF;
+          g = (dir ? b : r) & 0xFF;
+          b = (dir ? r : g) & 0xFF;
+          data[i] = (a << 24) + (r << 16) + (g << 8) + (b);
+        }
+        this.bitmap.data = new Buffer(data);
+        if (isNodePattern(cb)) return cb.call(this, null, this);
+        else return this;
+};
+
+
+Jimp.prototype.greenShift = function greenShift(factor, cb) {
+        if (!nullOrUndefined(factor)) {
+          if ("number" != typeof factor)
+                  return throwError.call(this, "factor must be a number", cb);
+          if (factor < 2)
+                  return throwError.call(this, "factor must be greater than 1", cb);
+        }
+        var width = this.bitmap.width,
+            height = this.bitmap.height,
+            data = this.bitmap.data,
+            factor = !nullOrUndefined(factor) ? factor : randFloor(64);
+        for (var i = 0, size = width * height * 4; i < size; i += 4) {
+          var shift = data[i + 1] + factor;
+          data[i] -= factor;
+          data[i + 1] = (shift) > 255 ? 255 : shift;
+          data[i + 2] -= factor;
+        }
+        this.bitmap.data = new Buffer(data);
+        if (isNodePattern(cb)) return cb.call(this, null, this);
+        else return this;
+};
+
+Jimp.prototype.redShift = function redShift(factor, cb) {
+        if (!nullOrUndefined(factor)) {
+          if ("number" != typeof factor)
+                  return throwError.call(this, "factor must be a number", cb);
+          if (factor < 2)
+                  return throwError.call(this, "factor must be greater than 1", cb);
+        }
+        var width = this.bitmap.width,
+            height = this.bitmap.height,
+            data = this.bitmap.data,
+            factor = !nullOrUndefined(factor) ? factor : randFloor(64);
+        for (var i = 0, size = width * height * 4; i < size; i += 4) {
+          var shift = data[i + 1] + factor;
+          data[i] = (shift) > 255 ? 255 : shift;
+          data[i + 1] -= factor;
+          data[i + 2] -= factor;
+        }
+        this.bitmap.data = new Buffer(data);
+        if (isNodePattern(cb)) return cb.call(this, null, this);
+        else return this;
+};
+
+Jimp.prototype.blueShift = function blueShift(factor, cb) {
+        if (!nullOrUndefined(factor)) {
+          if ("number" != typeof factor)
+                  return throwError.call(this, "factor must be a number", cb);
+          if (factor < 2)
+                  return throwError.call(this, "factor must be greater than 1", cb);
+        }
+        var width = this.bitmap.width,
+            height = this.bitmap.height,
+            data = this.bitmap.data,
+            factor = !nullOrUndefined(factor) ? factor : randFloor(64);
+        for (var i = 0, size = width * height * 4; i < size; i += 4) {
+          var shift = data[i + 1] + factor;
+          data[i] -= factor;
+          data[i + 1] -= factor;
+          data[i + 2] = (shift) > 255 ? 255 : shift;
+        }
+        this.bitmap.data = new Buffer(data);
+        if (isNodePattern(cb)) return cb.call(this, null, this);
+        else return this;
+};
+
+
+Jimp.prototype.superShift = function superShift(iter, dir, cb) {
+        if (!nullOrUndefined(iter)) {
+          if ("number" != typeof factor)
+                  return throwError.call(this, "factor must be a number", cb);
+          if (factor < 2)
+                  return throwError.call(this, "factor must be greater than 1", cb);
+        }
+        if (!nullOrUndefined(dir))
+                return throwError.call(this, "dir must be truthy or falsey", cb);
+        var width = this.bitmap.width,
+            height = this.bitmap.height,
+            data = this.bitmap.data,
+            dir = !nullOrUndefined(dir) ? dir : coinToss(),
+            iter = !nullOrUndefined(iter) ? iter : randRange(1, 10);
+        for (var i = 0, l = iter; i < l; i++) {
+          for (var i = 0, size = width * height * 4; i < size; i += 4) {
+            var r = data[i],
+                g = data[i + 1],
+                b = data[i + 2];
+            data[i] = dir ? g : b;
+            data[i + 1] = dir ? b : r;
+            data[i + 2] = dir ? r : g;
+          }
+        }
+        this.bitmap.data = new Buffer(data);
+        if (isNodePattern(cb)) return cb.call(this, null, this);
+        else return this;
+};
+
 
 module.exports = Jimp;
