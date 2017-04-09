@@ -652,10 +652,10 @@ Jimp.prototype.blueShift = function blueShift(factor, cb) {
 
 Jimp.prototype.superShift = function superShift(iter, dir, cb) {
         if (!nullOrUndefined(iter)) {
-          if ("number" != typeof factor)
-                  return throwError.call(this, "factor must be a number", cb);
-          if (factor < 2)
-                  return throwError.call(this, "factor must be greater than 1", cb);
+          if ("number" != typeof iter)
+                  return throwError.call(this, "iter must be a number", cb);
+          if (iter < 2)
+                  return throwError.call(this, "iter must be greater than 1", cb);
         }
         if (!nullOrUndefined(dir))
                 return throwError.call(this, "dir must be truthy or falsey", cb);
@@ -679,5 +679,610 @@ Jimp.prototype.superShift = function superShift(iter, dir, cb) {
         else return this;
 };
 
+// TODO: create test functions for the following functions:
+Jimp.prototype.superPixelFunk = function superPixelFunk(pixelation, cb) {
+        if (!nullOrUndefined(pixelation)) {
+          if ("number" != typeof pixelation)
+                  return throwError.call(this, "pixelation must be a number", cb);
+          if (pixelation < 2)
+                  return throwError.call(this, "pixelation must be greater than 1", cb);
+        }
+        var width = this.bitmap.width,
+            height = this.bitmap.height,
+            data = new Uint32Array(this.bitmap.data.buffer)
+            pixelation = !nullOrUndefined(pixelation) ? pixelation : randRange(2, 15);
+        for (var y = 0; y < height; y += pixelation) {
+          for (var x = 0; x < width; x += pixelation) {
+            if (coinToss()) {
+              var locale = coinToss();
+              var mask = randChoice([0x00FF0000, 0x0000FF00, 0x000000FF]);
+              var i = coinToss() ? (y * width + x) :
+                (y * width + (x - (pixelation * 2)));
+              for (var n = 0; n < pixelation; n++) {
+                for (var m = 0; m < pixelation; m++) {
+                  if (x + m < width) {
+                    var j = ((width * (y + n)) + (x + m));
+                    data[j] = locale ? data[i] : data[j] | mask;
+                  }
+                }
+              }
+            }
+          }
+        }
+        this.bitmap.data.writeUInt32BE(data, 0);
+        if (isNodePattern(cb)) return cb.call(this, null, this);
+        else return this;
+};
 
+Jimp.prototype.pixelFunk = function pixelFunk(pixelation, cb) {
+        if (!nullOrUndefined(pixelation)) {
+          if ("number" != typeof pixelation)
+                  return throwError.call(this, "pixelation must be a number", cb);
+          if (pixelation < 2)
+                  return throwError.call(this, "pixelation must be greater than 1", cb);
+        }
+        var width = this.bitmap.width,
+            height = this.bitmap.height,
+            data = new Uint32Array(this.bitmap.data.buffer)
+            pixelation = !nullOrUndefined(pixelation) ? pixelation : randRange(2, 10);
+        for (var y = 0; y < height; y += pixelation) {
+          for (var x = 0; x < width; x += pixelation) {
+            if (coinToss()) {
+              var i = (y * width + x);
+              for (var n = 0; n < pixelation; n++) {
+                for (var m = 0; m < pixelation; m++) {
+                  if (x + m < width) {
+                    var j = ((width * (y + n)) + (x + m));
+                    data[j] = data[i];
+                  }
+                }
+              }
+            }
+          }
+        }
+        this.bitmap.data.writeUInt32BE(data, 0);
+        if (isNodePattern(cb)) return cb.call(this, null, this);
+        else return this;
+};
+
+Jimp.prototype.focusImage = function focusImage(pixelation, cb) {
+        if (!nullOrUndefined(pixelation)) {
+          if ("number" != typeof pixelation)
+                  return throwError.call(this, "pixelation must be a number", cb);
+          if (pixelation < 2)
+                  return throwError.call(this, "pixelation must be greater than 1", cb);
+        }
+        var width = this.bitmap.width,
+            height = this.bitmap.height,
+            data = new Uint32Array(this.bitmap.data.buffer)
+            pixelation = !nullOrUndefined(pixelation) ? pixelation : randRange(2, 10);
+        for (var y = 0; y < height; y += pixelation) {
+          for (var x = 0; x < width; x += pixelation) {
+            var i = (y * width + x);
+            for (var n = 0; n < pixelation; n++) {
+              for (var m = 0; m < pixelation; m++) {
+                if (x + m < width) {
+                  var j = ((width * (y + n)) + (x + m));
+                  data[j] = data[i];
+                }
+              }
+            }
+          }
+        }
+        this.bitmap.data.writeUInt32BE(data, 0);
+        if (isNodePattern(cb)) return cb.call(this, null, this);
+        else return this;
+};
+
+Jimp.prototype.slice = function slice(cutstart, cutend, cb) {
+        if (!nullOrUndefined(cutstart)) {
+          if ("number" != typeof cutstart)
+                  return throwError.call(this, "cutstart must be a number", cb);
+          if (cutstart > 0 && cutstart < cutend)
+                  return throwError.call(this, "cutstart must be greater than 0 and less than cutend", cb);
+        }
+        if (!nullOrUndefined(cutend)) {
+          if ("number" != typeof cutend)
+                  return throwError.call(this, "cutend must be a number", cb);
+          if (cutend > 0 && cutend > cutstart)
+                  return throwError.call(this, "cutend must be greater than 0 and greater than cutstart", cb);
+        }
+        var width = this.bitmap.width,
+            height = this.bitmap.height,
+            data = this.bitmap.data,
+            cutend = !nullOrUndefined(cutend) ? cutend : randFloor(width * height * 4),
+            cutstart = !nullOrUndefined(cutstart) ? cutstart : Math.floor(cutend / 1.7),
+            cut = data.subarray(cutstart, cutend);
+        data.set(cut, randFloor((width * height * 4) - cut.length));
+        this.bitmap.data = new Buffer(data);
+        if (isNodePattern(cb)) return cb.call(this, null, this);
+        else return this;
+};
+Jimp.prototype.selectSlice = function selectSlice(selection, cb) {
+        if (!nullOrUndefined(selection)) {
+          if ("number" != typeof selection)
+                  return throwError.call(this, "selection must be a number", cb);
+          if (selection < 0 && selection > 1)
+                  return throwError.call(this, "selection must be 0 or 1", cb);
+        }
+        var width = this.bitmap.width,
+            height = this.bitmap.height,
+            data = this.bitmap.data,
+            selection = !nullOrUndefined(selection) ? selection : randRange(0,1),
+            cutend, cutstart;
+
+        switch (selection) {
+          case 0:
+            cutend = randFloor(width * height * 4);
+            cutstart = Math.floor(cutend / 1.7);
+            break;
+          case 1:
+            cutend = Math.random() < 0.75 ? randFloor(width * height * 4) : (width * height * 4);
+            cutstart = Math.floor(cutend / 1.7);
+            break;
+        }
+        var cut = data.subarray(cutstart, cutend);
+        data.set(cut, randFloor((width * height * 4) - cut.length));
+        this.bitmap.data = new Buffer(data);
+        if (isNodePattern(cb)) return cb.call(this, null, this);
+        else return this;
+};
+
+
+Jimp.prototype.superSlice = function superSlice(iter, cb) {
+        if (!nullOrUndefined(iter)) {
+          if ("number" != typeof iter)
+                  return throwError.call(this, "iter must be a number", cb);
+          if (iter > 0)
+                  return throwError.call(this, "iter must be greater than 0", cb);
+        }
+        var width = this.bitmap.width,
+            height = this.bitmap.height,
+            data = this.bitmap.data,
+            iter = !nullOrUndefined(iter) ? iter : 3,
+            cutend, cutstart;
+        for (var i = 0; i < iter; i++ ) {
+              switch (randRange(0,1)) {
+                case 0:
+                  cutend = randFloor(width * height * 4);
+                  cutstart = Math.floor(cutend / 1.7);
+                  break;
+                case 1:
+                  cutend = Math.random() < 0.75 ? randFloor(width * height * 4) : (width * height * 4);
+                  cutstart = Math.floor(cutend / 1.7);
+                  break;
+              }
+              var cut = data.subarray(cutstart, cutend);
+              data.set(cut, randFloor((width * height * 4) - cut.length));
+        }
+        this.bitmap.data = new Buffer(data);
+        if (isNodePattern(cb)) return cb.call(this, null, this);
+        else return this;
+};
+
+
+Jimp.prototype.fractalGhosts = function fractalGhosts(type, color, cb) {
+        if(!nullOrUndefined(type)) {
+          if (typeof type != 'number')
+                  return throwError.call(this, "type must be a number", cb);
+          if (type < 0 || type > 3)
+                  return throwError.call(this, "type must be a between 0 and 3", cb);
+        }
+        if(!nullOrUndefined(color)) {
+          if (typeof color != 'number')
+                  return throwError.call(this, "color must be a number", cb);
+          if (color < 0 || color > 4)
+                  return throwError.call(this, "color must be a between 0 and 4", cb);
+        }
+        var width = this.bitmap.width,
+            height = this.bitmap.height,
+            data = this.bitmap.data,
+            type = !nullOrUndefined(type) ? type : randRange(0,3),
+            rand = randRange(1, 10),
+            color = !nullOrUndefined(color) ? color : randRange(0,4);
+        switch (type) {
+          case 0:
+            for (var i = 0; i < data.length; i++) {
+              if (parseInt(data[i * 2 % data.length], 10) < parseInt(data[i], 10)) {
+                data[i] = data[i * 2 % data.length];
+              }
+            }
+            break;
+          case 1:
+            for (var i = 0; i < data.length; i++) {
+              var tmp = (i * rand) % data.length;
+              if (parseInt(data[tmp], 10) < parseInt(data[i], 10)) {
+                data[i] = data[tmp];
+              }
+            }
+            break;
+          case 2:
+            for (var i = 0; i < data.length; i++) {
+              if ((i % 4) === color) {
+                data[i] = 0xFF;
+                continue;
+              }
+              var tmp = (i * rand) % data.length;
+              if (parseInt(data[tmp], 10) < parseInt(data[i], 10)) {
+                data[i] = data[tmp];
+              }
+            }
+            break;
+          case 3:
+            for (var i = 0; i < data.length; i++) {
+              if ((i % 4) === color) {
+                data[i] = 0xFF;
+                continue;
+              }
+              if (parseInt(data[i * 2 % data.length], 10) < parseInt(data[i], 10)) {
+                data[i] = data[i * 2 % data.length];
+              }
+            }
+            break;
+        }
+        this.bitmap.data = new Buffer(data);
+        if (isNodePattern(cb)) return cb.call(this, null, this);
+        else return this;
+};
+
+
+Jimp.prototype.fractal = function fractal(type, cb) {
+        if(!nullOrUndefined(type)) {
+          if (typeof type != 'number')
+                  return throwError.call(this, "type must be a number", cb);
+          if (type < 0 || type > 1)
+                  return throwError.call(this, "type must be a 0 or 1", cb);
+        }
+        var width = this.bitmap.width,
+            height = this.bitmap.height,
+            data = this.bitmap.data,
+            type = !nullOrUndefined(type) ? type : randRange(0,1);
+        switch (type) {
+          case 0:
+            for (var i = data.length; i; i--) {
+              if (parseInt(data[(i * 2) % data.length], 10) < parseInt(data[i], 10)) {
+                data[i] = data[(i * 2) % data.length];
+              }
+            }
+            break;
+          case 1:
+            var m = randRange(2, 8);
+            for (var i = 0; i < data.length; i++) {
+              if (parseInt(data[(i * m) % data.length], 10) < parseInt(data[i], 10)) {
+                data[i] = data[(i * m) % data.length];
+              }
+            }
+            break;
+        }
+        this.bitmap.data = new Buffer(data);
+        if (isNodePattern(cb)) return cb.call(this, null, this);
+        else return this;
+};
+
+
+/*
+
+  gleech.shortsort = function shortsort(imageData) {
+    var data = new Uint32Array(imageData.data.buffer),
+      mm = randMinMax(0, imageData.height * imageData.width), cut;
+    mm = randMinMax2(mm[0], mm[1]);
+    cut = data.subarray(mm[0], mm[1]);
+    if (coinToss()) {
+      Array.prototype.sort.call(cut, leftSort);
+    } else {
+      Array.prototype.sort.call(cut, rightSort);
+    }
+    imageData.data.set(data.buffer);
+    return imageData;
+  };
+  gleech.shortdumbsort = function shortdumbsort(imageData) {
+    var data = new Uint32Array(imageData.data.buffer),
+      mm = randMinMax(0, imageData.width * imageData.height), da;
+    mm = randMinMax2(mm[0], mm[1]);
+    da = data.subarray(mm[0], mm[1]);
+    Array.prototype.sort.call(da);
+    imageData.data.set(da, mm[0]);
+    return imageData;
+  };
+
+  gleech.sort = function sort(imageData) {
+    var data = new Uint32Array(imageData.data.buffer);
+    if (coinToss()) {
+      Array.prototype.sort.call(data, leftSort);
+    } else {
+      Array.prototype.sort.call(data, rightSort);
+    }
+    imageData.data.set(data, 0);
+    return imageData;
+  };
+  gleech.slicesort = function slicesort(imageData) {
+    var data = new Uint32Array(imageData.data.buffer),
+      mm = randMinMax(0, data.length);
+    mm = randMinMax(mm[0], mm[1]);
+    mm = randMinMax(mm[0], mm[1]);
+    var cut = data.subarray(mm[0], mm[1]),
+      offset = Math.abs(randRound(data.length) - cut.length) % data.length;
+    Array.prototype.sort.call(cut, leftSort);
+    imageData.data.set(data.buffer, coinToss() ? offset : mm[0]);
+    return imageData;
+  };
+
+  gleech.sortRows = function sortRows(imageData) {
+    var data = new Uint32Array(imageData.data.buffer),
+      width = imageData.width, height = imageData.height;
+    for (var i = 0, size = data.length + 1; i < size; i += width) {
+      var da = data.subarray(i, i + width);
+      Array.prototype.sort.call(da, leftSort);
+      da.copyWithin(data, i);
+    }
+    imageData.data.set(data.buffer);
+    return imageData;
+  };
+
+  gleech.sortStripe = function sortStripe(imageData) {
+    var data = new Uint32Array(imageData.data.buffer),
+      width = imageData.width,
+      mm = randMinMax(0, width);
+    mm = randMinMax2(mm[0], mm[1]);
+    for (var i = 0, size = data.length + 1; i < size; i += width) {
+      var da = data.subarray(i + mm[0], i + mm[1]);
+      Array.prototype.sort.call(da, leftSort);
+      da.copyWithin(data, i + mm[0]);
+    }
+    imageData.data.set(data.buffer);
+    return imageData;
+  };
+
+
+  gleech.dumbSortRows = function dumbSortRows(imageData) {
+    var data = new Uint32Array(imageData.data.buffer),
+      width = imageData.width, height = imageData.height;
+    for (var i = 0, size = data.length; i < size; i += width) {
+      // var mm = randMinMax(i, i + width);
+      // var da = data.subarray(mm[0], mm[1]);
+      var da = data.subarray(i, i + width);
+      Array.prototype.sort.call(da);
+      data.set(da, i);
+         // for (var i = 0, size = data.length; i < size; i += width) {
+         // var da = Array.apply([], data.subarray(i, i + width));
+         // da.sort(coinToss);
+         // data.set(da, i);
+    }
+    imageData.data.set(data.buffer);
+    return imageData;
+  };
+  gleech.randomSortRows = function randomSortRows(imageData) {
+    var data = new Uint32Array(imageData.data.buffer),
+      width = imageData.width, height = imageData.height;
+    for (var i = 0, size = data.length; i < size; i += width) {
+      // var mm = randMinMax(i, i + width);
+      // var da = data.subarray(mm[0], mm[1]);
+      var da = data.subarray(i, i + width);
+      Array.prototype.sort.call(da, coinToss);
+      data.set(da, i);
+         // for (var i = 0, size = data.length; i < size; i += width) {
+         // var da = Array.apply([], data.subarray(i, i + width));
+         // da.sort(coinToss);
+         // data.set(da, i);
+    }
+    imageData.data.set(data.buffer);
+    return imageData;
+  };
+
+  gleech.invert = function invert(imageData) {
+    var data = new Uint32Array(imageData.data.buffer);
+    for (var i = 0; i < data.length; i++) {
+      data[i] = ~ data[i] | 0xFF000000;
+    }
+    imageData.data.set(data.buffer);
+    return imageData;
+  };
+  gleech.rgb_glitch = function rgb_glitch(imageData) {
+    var data = imageData.data,
+      width = imageData.width,
+      height = imageData.height,
+      mm = randMinMax(10, width - 10),
+      opt = mm[1] % 3,
+      dir = coinToss();
+    for (var y = 0; y < height; y++) {
+      for (var x = 0; x < width; x++) {
+        var index = ((width * y) + x) * 4,
+          red = data[index],
+          green = data[index + 1],
+          blue = data[index + 2];
+        if (dir) {
+          if (opt === 0) {
+            data[index + mm[0]] = red;
+            data[index + mm[0] + 1] = green;
+            data[index] = blue;
+          }else if (opt === 1) {
+            data[index] = red;
+            data[index + mm[0] + 1] = green;
+            data[index + mm[0]] = blue;
+          } else {
+            data[index + mm[0]] = red;
+            data[index + 1] = green;
+            data[index + mm[0]] = blue;
+          }
+        } else {
+          if (opt === 0) {
+            data[index - mm[0] + 1] = red;
+            data[index - mm[0]] = green;
+            data[index] = blue;
+          }else if (opt === 1) {
+            data[index + 1] = red;
+            data[index - mm[0]] = green;
+            data[index - mm[0]] = blue;
+          } else {
+            data[index - mm[0] + 1] = red;
+            data[index] = green;
+            data[index - mm[0]] = blue;
+          }
+        }
+      }
+    }
+    imageData.data.set(data);
+    return imageData;
+  };
+  gleech.DrumrollVerticalWave = function DrumrollVerticalWave(imageData) {
+     // borrowed from https://github.com/ninoseki/glitched-canvas & modified w/
+     // cosine
+    var data = imageData.data,
+      width = imageData.width,
+      height = imageData.height,
+      roll = 0;
+    for (var x = 0; x < width; x++) {
+      if (Math.random() > 0.95) roll = Math.floor(Math.cos(x) * (height * 2));
+      if (Math.random() > 0.98) roll = 0;
+
+      for (var y = 0; y < height; y++) {
+        var idx = (x + y * width) * 4;
+
+        var y2 = y + roll;
+        if (y2 > height - 1) y2 -= height;
+        var idx2 = (x + y2 * width) * 4;
+
+        for (var c = 0; c < 4; c++) {
+          data[idx2 + c] = data[idx + c];
+        }
+      }
+    }
+
+    imageData.data.set(data);
+    return imageData;
+  };
+  gleech.DrumrollHorizontalWave = function DrumrollHorizontalWave(imageData) {
+     // borrowed from https://github.com/ninoseki/glitched-canvas & modified
+     // with cosine
+    var data = imageData.data,
+      width = imageData.width,
+      height = imageData.height,
+      roll = 0;
+    for (var x = 0; x < width; x++) {
+      if (Math.random() > 0.95) roll = Math.floor(Math.cos(x) * (height * 2));
+      if (Math.random() > 0.98) roll = 0;
+
+      for (var y = 0; y < height; y++) {
+        var idx = (x + y * width) * 4;
+
+        var x2 = x + roll;
+        if (x2 > width - 1) x2 -= width;
+        var idx2 = (x2 + y * width) * 4;
+
+        for (var c = 0; c < 4; c++) {
+          data[idx2 + c] = data[idx + c];
+        }
+      }
+    }
+
+    imageData.data.set(data);
+    return imageData;
+  };
+  gleech.DrumrollVertical = function DrumrollVertical(imageData) {
+    // borrowed from https://github.com/ninoseki/glitched-canvas
+    var data = imageData.data,
+      width = imageData.width,
+      height = imageData.height,
+      roll = 0;
+    for (var x = 0; x < width; x++) {
+      if (Math.random() > 0.95) roll = randFloor(height);
+      if (Math.random() > 0.95) roll = 0;
+
+      for (var y = 0; y < height; y++) {
+        var idx = (x + y * width) * 4;
+
+        var y2 = y + roll;
+        if (y2 > height - 1) y2 -= height;
+        var idx2 = (x + y2 * width) * 4;
+
+        for (var c = 0; c < 4; c++) {
+          data[idx2 + c] = data[idx + c];
+        }
+      }
+    }
+
+    imageData.data.set(data);
+    return imageData;
+  };
+  gleech.DrumrollHorizontal = function DrumrollHorizontal(imageData) {
+    // borrowed from https://github.com/ninoseki/glitched-canvas
+    var data = imageData.data,
+      width = imageData.width,
+      height = imageData.height,
+      roll = 0;
+    for (var x = 0; x < width; x++) {
+      if (Math.random() < 0.05) roll = randFloor(height);
+      if (Math.random() < 0.05) roll = 0;
+
+      for (var y = 0; y < height; y++) {
+        var idx = (x + y * width) * 4;
+
+        var x2 = x + roll;
+        if (x2 > width - 1) x2 -= width;
+        var idx2 = (x2 + y * width) * 4;
+
+        for (var c = 0; c < 4; c++) {
+          data[idx2 + c] = data[idx + c];
+        }
+      }
+    }
+
+    imageData.data.set(data);
+    return imageData;
+  };
+
+  gleech.scanlines = function scanlines(imageData) {
+    // future options:
+    // type, xor/or ammount, stripe width
+    var data = new Uint32Array(imageData.data.buffer),
+      width = imageData.width, height = imageData.height,
+      type = randRange(0, 3),
+      size = randRange(3, 15),
+      xorNum = randChoice([0x00555555, 0x00FF00FF00, 0x00F0F0F0, 0x00333333]),
+      orNum = randChoice([0xFF555555, 0xFFFF00FF00, 0xFFF0F0F0, 0xFF333333]);
+    for (var i = 0, l = data.length; i < l; i += (width * size)) {
+      var row = Array.apply([], data.subarray(i, i + width));
+      for (var p in row) {
+        if (type === 0) {
+          row[p] = row[p] ^ xorNum;
+        } else if (type === 1) {
+          row[p] = row[p] | orNum;
+        } else {
+          // invert
+          row[p] = ~ row[p] | 0xFF000000;
+        }
+      }
+      data.set(row, i);
+    }
+    imageData.data.set(data.buffer);
+    return imageData;
+  };
+
+  gleech.pixelSort = function pixelSort(imageData) {
+    var data = new Uint32Array(imageData.data.buffer),
+      width = imageData.width, height = imageData.height;
+    var upper = 0xFFAAAAAA, lower = 0xFF333333;
+    for (var i = 0, size = data.length; i < size; i += width) {
+      var row = Array.apply([], data.subarray(i, i + width));
+      var low = 0, high = 0;
+      for (var j in row) {
+        if (!high && !low && row[j] >= low) {
+          low = j;
+        }
+        if (low && !high && row[j] >= high) {
+          high = j;
+        }
+      }
+      if (low) {
+        var da = row.slice(low, high);
+        Array.prototype.sort.call(da, leftSort);
+        data.set(da, (i + low) % (height * width));
+      }
+    }
+    imageData.data.set(data.buffer);
+    return imageData;
+  };
+
+
+*/
 module.exports = Jimp;

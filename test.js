@@ -63,3 +63,35 @@ gleech.read("test.jpg", function (err, img) {
         if (err) throw err;
         img.superShift().write("test_superShift.jpg");
 });
+gleech.read("test.jpg", function (err, img) {
+        if (err) throw err;
+        img.superPixelFunk().write("test_superPixelFunk.jpg");
+});
+gleech.read("test.jpg", function (err, img) {
+        if (err) throw err;
+        img.pixelFunk().write("test_pixelFunk.jpg");
+});
+gleech.read("test.jpg", function (err, img) {
+        if (err) throw err;
+        img.focusImage().write("test_focusImage.jpg");
+});
+gleech.read("test.jpg", function (err, img) {
+        if (err) throw err;
+        img.slice().write("test_slice.jpg");
+});
+gleech.read("test.jpg", function (err, img) {
+        if (err) throw err;
+        img.selectSlice().write("test_selectSlice.jpg");
+});
+gleech.read("test.jpg", function (err, img) {
+        if (err) throw err;
+        img.superSlice().write("test_superSlice.jpg");
+});
+gleech.read("test.jpg", function (err, img) {
+        if (err) throw err;
+        img.fractalGhosts().write("test_fractalGhosts.jpg");
+});
+gleech.read("test.jpg", function (err, img) {
+        if (err) throw err;
+        img.fractal().write("test_fractal.jpg");
+});
