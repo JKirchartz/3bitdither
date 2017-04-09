@@ -45,8 +45,12 @@ gleech.read("test.jpg", function (err, img) {
 });
 gleech.read("test.jpg", function (err, img) {
         if (err) throw err;
-        img.colorShift2().write("test_colorShift2.jpg");
+        img.rgbShift().write("test_rgbShift.jpg");
 });
+// gleech.read("test.jpg", function (err, img) {
+//         if (err) throw err;
+//         img.colorShift2().write("test_colorShift2.jpg");
+// });
 gleech.read("test.jpg", function (err, img) {
         if (err) throw err;
         img.greenShift().write("test_greenShift.jpg");
