@@ -69,8 +69,13 @@ You can also use the `--auto` flag to make Jekyll automatically update the site 
 
 Portions under the included MIT license, copyright 2013 Matthew Nolan Caudill, as noted.
 
-99% of the rest copyleft 2013 JKirchartz, except as noted.
+JIMP (included in the node.js branch) is included under the MIT license (with Open Sans included under the Apache License)
 
-## I am open to any and all Pull Requests
+Glitchy3bitDither is presented under the [GPL3.0 license](gpl-3.0.txt), copyleft 2013 JKirchartz, except as noted.
 
-so... hack away! huzzah!
+
+# I am open to any and all Pull Requests
+
+please read [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
+
+and... hack away! huzzah!
