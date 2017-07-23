@@ -47,7 +47,7 @@ var Jimp = require('jimp');
   }
 
   function nullOrUndefined(item) {
-    if (typeof item !== 'undefined' || item == null) {
+    if (typeof item !== 'undefined' || item === null) {
       return true;
     }
     return false;
@@ -164,11 +164,16 @@ Jimp.prototype.dither8Bit = function dither8Bit(size, cb) {
         var width = this.bitmap.width,
                 height = this.bitmap.height,
                 data = this.bitmap.data,
-                size = !nullOrUndefined(size) ? size : 4,
                 sum_r, sum_g, sum_b, avg_r, avg_g, avg_b;
 
+<<<<<<< d7e6d2453388d83342ddcbb7a596db41a6bc57a5:site/gleech.js.html
         for (var y = 0; y &lt; height; y += size) {
                 for (var x = 0; x &lt; width; x += size) {
+=======
+        size = !nullOrUndefined(size) ? size : 4;
+        for (var y = 0; y < height; y += size) {
+                for (var x = 0; x < width; x += size) {
+>>>>>>> fix syntax errors:gleech.js
                         sum_r = 0;
                         sum_g = 0;
                         sum_b = 0;
@@ -610,9 +615,15 @@ Jimp.prototype.colorShift = function colorShift(dir, cb) {
                 return throwError.call(this, "dir must be truthy or falsey", cb);
         var width = this.bitmap.width,
             height = this.bitmap.height,
+<<<<<<< d7e6d2453388d83342ddcbb7a596db41a6bc57a5:site/gleech.js.html
             data = this.bitmap.data,
             dir = !nullOrUndefined(dir) ? dir : coinToss();
         for (var i = 0, size = width * height * 4; i &lt; size; i += 4) {
+=======
+            data = this.bitmap.data;
+        dir = !nullOrUndefined(dir) ? dir : coinToss();
+        for (var i = 0, size = width * height * 4; i < size; i += 4) {
+>>>>>>> fix syntax errors:gleech.js
           var r = data[i],
               g = data[i + 1],
               b = data[i + 2];
@@ -663,9 +674,15 @@ Jimp.prototype.greenShift = function greenShift(factor, cb) {
         }
         var width = this.bitmap.width,
             height = this.bitmap.height,
+<<<<<<< d7e6d2453388d83342ddcbb7a596db41a6bc57a5:site/gleech.js.html
             data = this.bitmap.data,
             factor = !nullOrUndefined(factor) ? factor : randFloor(64);
         for (var i = 0, size = width * height * 4; i &lt; size; i += 4) {
+=======
+            data = this.bitmap.data;
+        factor = !nullOrUndefined(factor) ? factor : randFloor(64);
+        for (var i = 0, size = width * height * 4; i < size; i += 4) {
+>>>>>>> fix syntax errors:gleech.js
           var shift = data[i + 1] + factor;
           data[i] -= factor;
           data[i + 1] = (shift) > 255 ? 255 : shift;
@@ -689,9 +706,15 @@ Jimp.prototype.redShift = function redShift(factor, cb) {
         }
         var width = this.bitmap.width,
             height = this.bitmap.height,
+<<<<<<< d7e6d2453388d83342ddcbb7a596db41a6bc57a5:site/gleech.js.html
             data = this.bitmap.data,
             factor = !nullOrUndefined(factor) ? factor : randFloor(64);
         for (var i = 0, size = width * height * 4; i &lt; size; i += 4) {
+=======
+            data = this.bitmap.data;
+        factor = !nullOrUndefined(factor) ? factor : randFloor(64);
+        for (var i = 0, size = width * height * 4; i < size; i += 4) {
+>>>>>>> fix syntax errors:gleech.js
           var shift = data[i] + factor;
           data[i] = (shift) > 255 ? 255 : shift;
           data[i + 1] -= factor;
@@ -715,9 +738,15 @@ Jimp.prototype.blueShift = function blueShift(factor, cb) {
         }
         var width = this.bitmap.width,
             height = this.bitmap.height,
+<<<<<<< d7e6d2453388d83342ddcbb7a596db41a6bc57a5:site/gleech.js.html
             data = this.bitmap.data,
             factor = !nullOrUndefined(factor) ? factor : randFloor(64);
         for (var i = 0, size = width * height * 4; i &lt; size; i += 4) {
+=======
+            data = this.bitmap.data;
+        factor = !nullOrUndefined(factor) ? factor : randFloor(64);
+        for (var i = 0, size = width * height * 4; i < size; i += 4) {
+>>>>>>> fix syntax errors:gleech.js
           var shift = data[i + 2] + factor;
           data[i] -= factor;
           data[i + 1] -= factor;
@@ -756,8 +785,8 @@ Jimp.prototype.rgbShift = function rgbShift(from, to, factor, cb) {
         }
         var width = this.bitmap.width,
             height = this.bitmap.height,
-            data = this.bitmap.data,
-            factor = !nullOrUndefined(factor) ? factor : randFloor(64);
+            data = this.bitmap.data;
+        factor = !nullOrUndefined(factor) ? factor : randFloor(64);
         switch (from) {
           case 'red':
           case 'r':
@@ -830,6 +859,7 @@ Jimp.prototype.superShift = function superShift(iter, dir, cb) {
                 return throwError.call(this, "dir must be truthy or falsey", cb);
         var width = this.bitmap.width,
             height = this.bitmap.height,
+<<<<<<< d7e6d2453388d83342ddcbb7a596db41a6bc57a5:site/gleech.js.html
             data = this.bitmap.data,
             dir = !nullOrUndefined(dir) ? dir : coinToss(),
             iter = !nullOrUndefined(iter) ? iter : randRange(1, 10);
@@ -841,6 +871,19 @@ Jimp.prototype.superShift = function superShift(iter, dir, cb) {
             data[i] = dir ? g : b;
             data[i + 1] = dir ? b : r;
             data[i + 2] = dir ? r : g;
+=======
+            data = this.bitmap.data;
+        dir = !nullOrUndefined(dir) ? dir : coinToss();
+        iter = !nullOrUndefined(iter) ? iter : randRange(1, 10);
+        for (var i = 0, l = iter; i < l; i++) {
+          for (var j = 0, size = width * height * 4; j < size; j += 4) {
+            var r = data[j],
+                g = data[j + 1],
+                b = data[j + 2];
+            data[j] = dir ? g : b;
+            data[j + 1] = dir ? b : r;
+            data[j + 2] = dir ? r : g;
+>>>>>>> fix syntax errors:gleech.js
           }
         }
         this.bitmap.data = new Buffer(data);
@@ -861,10 +904,17 @@ Jimp.prototype.superPixelFunk = function superPixelFunk(pixelation, cb) {
         }
         var width = this.bitmap.width,
             height = this.bitmap.height,
+<<<<<<< d7e6d2453388d83342ddcbb7a596db41a6bc57a5:site/gleech.js.html
             data = new Uint32Array(this.bitmap.data.buffer)
             pixelation = !nullOrUndefined(pixelation) ? pixelation : randRange(2, 15);
         for (var y = 0; y &lt; height; y += pixelation) {
           for (var x = 0; x &lt; width; x += pixelation) {
+=======
+            data = new Uint32Array(this.bitmap.data.buffer);
+        pixelation = !nullOrUndefined(pixelation) ? pixelation : randRange(2, 15);
+        for (var y = 0; y < height; y += pixelation) {
+          for (var x = 0; x < width; x += pixelation) {
+>>>>>>> fix syntax errors:gleech.js
             if (coinToss()) {
               var locale = coinToss();
               var mask = randChoice([0x00FF0000, 0x0000FF00, 0x000000FF]);
@@ -899,10 +949,17 @@ Jimp.prototype.pixelFunk = function pixelFunk(pixelation, cb) {
         }
         var width = this.bitmap.width,
             height = this.bitmap.height,
+<<<<<<< d7e6d2453388d83342ddcbb7a596db41a6bc57a5:site/gleech.js.html
             data = new Uint32Array(this.bitmap.data.buffer)
             pixelation = !nullOrUndefined(pixelation) ? pixelation : randRange(2, 10);
         for (var y = 0; y &lt; height; y += pixelation) {
           for (var x = 0; x &lt; width; x += pixelation) {
+=======
+            data = new Uint32Array(this.bitmap.data.buffer);
+        pixelation = !nullOrUndefined(pixelation) ? pixelation : randRange(2, 10);
+        for (var y = 0; y < height; y += pixelation) {
+          for (var x = 0; x < width; x += pixelation) {
+>>>>>>> fix syntax errors:gleech.js
             if (coinToss()) {
               var i = (y * width + x);
               for (var n = 0; n &lt; pixelation; n++) {
@@ -934,10 +991,17 @@ Jimp.prototype.focusImage = function focusImage(pixelation, cb) {
         }
         var width = this.bitmap.width,
             height = this.bitmap.height,
+<<<<<<< d7e6d2453388d83342ddcbb7a596db41a6bc57a5:site/gleech.js.html
             data = new Uint32Array(this.bitmap.data.buffer)
             pixelation = !nullOrUndefined(pixelation) ? pixelation : randRange(2, 10);
         for (var y = 0; y &lt; height; y += pixelation) {
           for (var x = 0; x &lt; width; x += pixelation) {
+=======
+            data = new Uint32Array(this.bitmap.data.buffer);
+        pixelation = !nullOrUndefined(pixelation) ? pixelation : randRange(2, 10);
+        for (var y = 0; y < height; y += pixelation) {
+          for (var x = 0; x < width; x += pixelation) {
+>>>>>>> fix syntax errors:gleech.js
             var i = (y * width + x);
             for (var n = 0; n &lt; pixelation; n++) {
               for (var m = 0; m &lt; pixelation; m++) {
@@ -976,9 +1040,9 @@ Jimp.prototype.slice = function slice(cutstart, cutend, cb) {
         var width = this.bitmap.width,
             height = this.bitmap.height,
             data = this.bitmap.data,
-            cutend = !nullOrUndefined(cutend) ? cutend : randFloor(width * height * 4),
-            cutstart = !nullOrUndefined(cutstart) ? cutstart : Math.floor(cutend / 1.7),
             cut = data.subarray(cutstart, cutend);
+        cutend = !nullOrUndefined(cutend) ? cutend : randFloor(width * height * 4);
+        cutstart = !nullOrUndefined(cutstart) ? cutstart : Math.floor(cutend / 1.7);
         data.set(cut, randFloor((width * height * 4) - cut.length));
         this.bitmap.data = new Buffer(data);
         if (isNodePattern(cb)) return cb.call(this, null, this);
@@ -999,9 +1063,9 @@ Jimp.prototype.selectSlice = function selectSlice(selection, cb) {
         var width = this.bitmap.width,
             height = this.bitmap.height,
             data = this.bitmap.data,
-            selection = !nullOrUndefined(selection) ? selection : randRange(0,1),
             cutend, cutstart;
 
+        selection = !nullOrUndefined(selection) ? selection : randRange(0,1);
         switch (selection) {
           case 0:
             cutend = randFloor(width * height * 4);
@@ -1034,9 +1098,13 @@ Jimp.prototype.superSlice = function superSlice(iter, cb) {
         var width = this.bitmap.width,
             height = this.bitmap.height,
             data = this.bitmap.data,
-            iter = !nullOrUndefined(iter) ? iter : 3,
             cutend, cutstart;
+<<<<<<< d7e6d2453388d83342ddcbb7a596db41a6bc57a5:site/gleech.js.html
         for (var i = 0; i &lt; iter; i++ ) {
+=======
+        iter = !nullOrUndefined(iter) ? iter : 3;
+        for (var i = 0; i < iter; i++ ) {
+>>>>>>> fix syntax errors:gleech.js
               switch (randRange(0,1)) {
                 case 0:
                   cutend = randFloor(width * height * 4);
@@ -1077,9 +1145,10 @@ Jimp.prototype.fractalGhosts = function fractalGhosts(type, color, cb) {
         var width = this.bitmap.width,
             height = this.bitmap.height,
             data = this.bitmap.data,
-            type = !nullOrUndefined(type) ? type : randRange(0,3),
-            rand = randRange(1, 10),
-            color = !nullOrUndefined(color) ? color : randRange(0,4);
+            rand = randRange(1, 10);
+        type = !nullOrUndefined(type) ? type : randRange(0,3);
+        color = !nullOrUndefined(color) ? color : randRange(0,4);
+        var tmp;
         switch (type) {
           case 0:
             for (var i = 0; i &lt; data.length; i++) {
@@ -1089,14 +1158,22 @@ Jimp.prototype.fractalGhosts = function fractalGhosts(type, color, cb) {
             }
             break;
           case 1:
+<<<<<<< d7e6d2453388d83342ddcbb7a596db41a6bc57a5:site/gleech.js.html
             for (var i = 0; i &lt; data.length; i++) {
               var tmp = (i * rand) % data.length;
               if (parseInt(data[tmp], 10) &lt; parseInt(data[i], 10)) {
                 data[i] = data[tmp];
+=======
+            for (var j = 0; j < data.length; j++) {
+              tmp = (j * rand) % data.length;
+              if (parseInt(data[tmp], 10) < parseInt(data[j], 10)) {
+                data[j] = data[tmp];
+>>>>>>> fix syntax errors:gleech.js
               }
             }
             break;
           case 2:
+<<<<<<< d7e6d2453388d83342ddcbb7a596db41a6bc57a5:site/gleech.js.html
             for (var i = 0; i &lt; data.length; i++) {
               if ((i % 4) === color) {
                 data[i] = 0xFF;
@@ -1105,10 +1182,21 @@ Jimp.prototype.fractalGhosts = function fractalGhosts(type, color, cb) {
               var tmp = (i * rand) % data.length;
               if (parseInt(data[tmp], 10) &lt; parseInt(data[i], 10)) {
                 data[i] = data[tmp];
+=======
+            for (var k = 0; k < data.length; k++) {
+              if ((k % 4) === color) {
+                data[k] = 0xFF;
+                continue;
+              }
+              tmp = (k * rand) % data.length;
+              if (parseInt(data[tmp], 10) < parseInt(data[k], 10)) {
+                data[k] = data[tmp];
+>>>>>>> fix syntax errors:gleech.js
               }
             }
             break;
           case 3:
+<<<<<<< d7e6d2453388d83342ddcbb7a596db41a6bc57a5:site/gleech.js.html
             for (var i = 0; i &lt; data.length; i++) {
               if ((i % 4) === color) {
                 data[i] = 0xFF;
@@ -1116,6 +1204,15 @@ Jimp.prototype.fractalGhosts = function fractalGhosts(type, color, cb) {
               }
               if (parseInt(data[i * 2 % data.length], 10) &lt; parseInt(data[i], 10)) {
                 data[i] = data[i * 2 % data.length];
+=======
+            for (var l = 0; l < data.length; l++) {
+              if ((l % 4) === color) {
+                data[l] = 0xFF;
+                continue;
+              }
+              if (parseInt(data[l * 2 % data.length], 10) < parseInt(data[l], 10)) {
+                data[l] = data[l * 2 % data.length];
+>>>>>>> fix syntax errors:gleech.js
               }
             }
             break;
@@ -1139,8 +1236,8 @@ Jimp.prototype.fractal = function fractal(type, cb) {
         }
         var width = this.bitmap.width,
             height = this.bitmap.height,
-            data = this.bitmap.data,
-            type = !nullOrUndefined(type) ? type : randRange(0,1);
+            data = this.bitmap.data;
+        type = !nullOrUndefined(type) ? type : randRange(0,1);
         switch (type) {
           case 0:
             for (var i = data.length; i; i--) {
@@ -1151,9 +1248,15 @@ Jimp.prototype.fractal = function fractal(type, cb) {
             break;
           case 1:
             var m = randRange(2, 8);
+<<<<<<< d7e6d2453388d83342ddcbb7a596db41a6bc57a5:site/gleech.js.html
             for (var i = 0; i &lt; data.length; i++) {
               if (parseInt(data[(i * m) % data.length], 10) &lt; parseInt(data[i], 10)) {
                 data[i] = data[(i * m) % data.length];
+=======
+            for (var j = 0; j < data.length; j++) {
+              if (parseInt(data[(j * m) % data.length], 10) < parseInt(data[j], 10)) {
+                data[j] = data[(j * m) % data.length];
+>>>>>>> fix syntax errors:gleech.js
               }
             }
             break;
