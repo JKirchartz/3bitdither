@@ -6,7 +6,10 @@
   "dependencies": {
     "jimp": "^0.2.27"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-concat": "^1.0.1"
+  },
   "scripts": {
     "test": "node test.js",
     "deploy": "git subtree push --prefix site origin gh-pages"
