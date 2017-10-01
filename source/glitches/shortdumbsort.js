@@ -1,13 +1,13 @@
 /**
- * shortsort
+ * shortdumbsort
  * @param {integer} start - pixel to start at
  * @param {integer} end - pixel to end at
  */
-Jimp.prototype.shortsort = function shortsort(dir, start, end, cb) {
+Jimp.prototype.shortdumbsort = function shortdumbsort(start, end, cb) {
         var width = this.bitmap.width,
         height = this.bitmap.height,
-        data = new Uint32Array(this.bitmap.data),
-        cut, mm;
+        data = new Uint32Array(this.bitmap.data.buffer);
+        var mm;
         if (nullOrUndefined(start) && nullOrUndefined(end)) {
                 mm = randMinMax(0, imageData.width * imageData.height);
                 mm = randMinMax2(mm[0], mm[1]);
@@ -18,15 +18,10 @@ Jimp.prototype.shortsort = function shortsort(dir, start, end, cb) {
         } else {
                 mm = [start, end];
         }
-        cut = data.subarray(mm[0], mm[1]);
-        dir = nullOrUndefined(dir)? coinToss() : dir;
-        if (dir) {
-                Array.prototype.sort.call(cut, leftSort);
-        } else {
-                Array.prototype.sort.call(cut, rightSort);
-        }
-
-        this.bitmap.data = new Buffer(data.buffer);
+        var da = data.subarray(mm[0], mm[1]);
+        Array.prototype.sort.call(da);
+        data.set(da, mm[0]);
+        this.bitmap.data = new Buffer(data);
         if (isNodePattern(cb)) return cb.call(this, null, this);
         else return this;
 };

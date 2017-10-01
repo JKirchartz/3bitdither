@@ -1,13 +1,15 @@
 /**
- * shortsort
+ * slicesort
+ * @param {boolean} direction - direction to sort, T/F for Left or Right
  * @param {integer} start - pixel to start at
  * @param {integer} end - pixel to end at
  */
-Jimp.prototype.shortsort = function shortsort(dir, start, end, cb) {
+Jimp.prototype.slicesort = function slicesort(dir, start, end, cb) {
         var width = this.bitmap.width,
         height = this.bitmap.height,
-        data = new Uint32Array(this.bitmap.data),
-        cut, mm;
+        data = new Uint32Array(this.bitmap.data);
+        dir = nullOrUndefined(dir)? coinToss() : dir;
+
         if (nullOrUndefined(start) && nullOrUndefined(end)) {
                 mm = randMinMax(0, imageData.width * imageData.height);
                 mm = randMinMax2(mm[0], mm[1]);
@@ -18,15 +20,17 @@ Jimp.prototype.shortsort = function shortsort(dir, start, end, cb) {
         } else {
                 mm = [start, end];
         }
-        cut = data.subarray(mm[0], mm[1]);
-        dir = nullOrUndefined(dir)? coinToss() : dir;
-        if (dir) {
+
+        var cut = data.subarray(mm[0], mm[1]),
+        offset = Math.abs(randRound(data.length) - cut.length) % data.length;
+        if(dir) {
                 Array.prototype.sort.call(cut, leftSort);
         } else {
                 Array.prototype.sort.call(cut, rightSort);
         }
+        imageData.data.set(data.buffer, coinToss() ? offset : mm[0]);
 
-        this.bitmap.data = new Buffer(data.buffer);
+        this.bitmap.data = new Buffer(data);
         if (isNodePattern(cb)) return cb.call(this, null, this);
         else return this;
 };
