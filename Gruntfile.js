@@ -8,10 +8,10 @@ module.exports = function (grunt) {
 			gleech: {
 				files: {
 					'dist/gleech.js': [
-						"lib/header.js",
-						"lib/helpers.js",
-						"lib/glitches/*",
-						"lib/footer.js"
+						"source/header.js",
+						"source/helpers.js",
+						"source/glitches/*",
+						"source/footer.js"
 					]
 				}
 			}
