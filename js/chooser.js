@@ -2,7 +2,7 @@
  * chooser.js
  * Copyleft (ↄ) 2016 kirch <kirch@arp>
  *
- * Distributed under terms of the NPL (Necessary Public License) license.
+ * Distributed under terms of the GPL3.0 license.
  */
 
 
