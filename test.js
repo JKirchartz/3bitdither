@@ -2,7 +2,7 @@
  * test.js
  * Copyright (C) 2017 jkirchartz <me@jkirchartz.com>
  *
- * Distributed under terms of the NPL (Necessary Public License) license.
+ * Distributed under terms of the GPL 3.0 (General Public License) license.
  */
 var gleech = require("./gleech.js");
 
