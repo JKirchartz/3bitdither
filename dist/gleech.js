@@ -13,6 +13,12 @@ var Jimp = require('jimp');
  * Helper Functions
  ***************************************************/
 
+function throwError(err, cb) {
+	if (typeof err === 'string') err = new Error(err);
+	if(typeof cb === 'function') return cb.call(this, err);
+	else throw err;
+}
+
 function adjustPixelError(data, i, error, multiplier) {
 	data[i] = data[i] + multiplier * error[0];
 	data[i + 1] = data[i + 1] + multiplier * error[1];
@@ -157,12 +163,12 @@ Jimp.prototype.blueShift = function blueShift(factor, cb) {
  * @param {boolean} dir - direction to shift colors, true for RGB->GBR, false for RGB->BRG.
  */
 Jimp.prototype.colorShift = function colorShift(dir, cb) {
-	if (!nullOrUndefined(dir))
-		return throwError.call(this, "dir must be truthy or falsey", cb);
 	var width = this.bitmap.width,
 	height = this.bitmap.height,
 	data = this.bitmap.data;
 	dir = !nullOrUndefined(dir) ? dir : coinToss();
+	if (!nullOrUndefined(dir) && typeof (!!dir) === 'boolean')
+		return throwError.call(this, "dir must be truthy or falsey", cb);
 	for (var i = 0, size = width * height * 4; i < size; i += 4) {
 		var r = data[i],
 			g = data[i + 1],
@@ -209,17 +215,16 @@ Jimp.prototype.colorShift2 = function colorShift2(dir, cb) {
  * @param {number} size - a number greater than 1 representing pixel size.
  */
 Jimp.prototype.dither8Bit = function dither8Bit(size, cb) {
-	if (!nullOrUndefined(size)) {
-		if ("number" != typeof size)
-			return throwError.call(this, "size must be a number", cb);
-		if (size < 2)
-			return throwError.call(this, "size must be greater than 1", cb);
-	}
+	size = !nullOrUndefined(size) ? size : randRange(4, 15);
+	if (typeof size !== 'number')
+		return throwError.call(this, "size must be a number " + size, cb);
+	if (size < 2)
+		return throwError.call(this, "size must be greater than 1", cb);
+
 	var width = this.bitmap.width,
 	height = this.bitmap.height,
 	data = this.bitmap.data,
 	sum_r, sum_g, sum_b, avg_r, avg_g, avg_b;
-	size = !nullOrUndefined(size) ? size : 4;
 
 	for (var y = 0; y < height; y += size) {
 		for (var x = 0; x < width; x += size) {
@@ -324,12 +329,12 @@ Jimp.prototype.ditherAtkinsons = function ditherAtkinsons(cb) {
  * @param {number} map - which matrix to use for the threshold map - 0: 3x3,  1: 4x4, 2: 8x8
  */
 Jimp.prototype.ditherBayer = function ditherBayer(map, cb) {
-	if (!nullOrUndefined(map)) {
-		if ("number" != typeof map)
-			return throwError.call(this, "map must be a number", cb);
-		if (map < 0 || map > 2)
-			return throwError.call(this, "map must be a number from 0 to 2", cb);
-	}
+	map = !nullOrUndefined(map) ? map : randFloor(3);
+	if ("number" !== typeof map)
+		return throwError.call(this, "map must be a number", cb);
+	if (map < 0 || map > 2)
+		return throwError.call(this, "map must be a number from 0 to 2", cb);
+
 	var width = this.bitmap.width,
 	height = this.bitmap.height,
 	data = this.bitmap.data,
@@ -380,56 +385,55 @@ Jimp.prototype.ditherBayer = function ditherBayer(map, cb) {
  * @param {number} map - which matrix to use for the threshold map - 0: 3x3,  1: 4x4, 2: 8x8
  */
 Jimp.prototype.ditherBayer3 = function ditherBayer3(map, cb) {
-	if (!nullOrUndefined(map)) {
-		if ("number" != typeof map)
+	map = !nullOrUndefined(map) ? map : randFloor(3);
+			if (typeof map !== 'number')
 			return throwError.call(this, "map must be a number", cb);
-		if (map < 0 || map > 2)
+			if (map < 0 || map > 2)
 			return throwError.call(this, "map must be a number from 0 to 2", cb);
-	}
-	var width = this.bitmap.width,
-	height = this.bitmap.height,
-	data = this.bitmap.data,
-	/* adding in more threshold maps, and the randomizer */
-	threshold_maps = [
-		[
+			var width = this.bitmap.width,
+			height = this.bitmap.height,
+			data = this.bitmap.data,
+			/* adding in more threshold maps, and the randomizer */
+			threshold_maps = [
+			[
 			[3, 7, 4],
 			[6, 1, 9],
 			[2, 8, 5]
-		],
-		[
+			],
+			[
 			[1, 9, 3, 11],
 			[13, 5, 15, 7],
 			[4, 12, 2, 10],
 			[16, 8, 14, 6]
-		],
-		[
-			[1, 49, 13, 61, 4, 52, 16, 64],
-			[33, 17, 45, 29, 36, 20, 48, 32],
-			[9, 57, 5, 53, 12, 60, 8, 56],
-			[41, 25, 37, 21, 44, 28, 40, 24],
-			[3, 51, 15, 63, 2, 50, 14, 62],
-			[35, 19, 47, 31, 34, 18, 46, 30],
-			[11, 59, 7, 55, 10, 58, 6, 54],
-			[43, 27, 39, 23, 42, 26, 38, 22]
-		]
 			],
-			threshold_map = !nullOrUndefined(map) ? threshold_maps[map] : threshold_maps[randFloor(threshold_maps.length)],
-			size = threshold_map.length;
-			for (var y = 0; y < height; y++) {
-				for (var x = 0; x < width; x++) {
-					var i = 4 * (y * width + x);
-					/* apply the tranformation to each color */
-					data[i] = ((data[i] * 17) / 255) < threshold_map[x % size][y %
-						size] ? 0 : 0xff;
-					data[i + 1] = ((data[i + 1] * 17) / 255) < threshold_map[x %
-						size][y % size] ? 0 : 0xff;
-					data[i + 2] = ((data[i + 2] * 17) / 255) < threshold_map[x %
-						size][y % size] ? 0 : 0xff;
+			[
+				[1, 49, 13, 61, 4, 52, 16, 64],
+				[33, 17, 45, 29, 36, 20, 48, 32],
+				[9, 57, 5, 53, 12, 60, 8, 56],
+				[41, 25, 37, 21, 44, 28, 40, 24],
+				[3, 51, 15, 63, 2, 50, 14, 62],
+				[35, 19, 47, 31, 34, 18, 46, 30],
+				[11, 59, 7, 55, 10, 58, 6, 54],
+				[43, 27, 39, 23, 42, 26, 38, 22]
+			]
+				],
+				threshold_map = !nullOrUndefined(map) ? threshold_maps[map] : threshold_maps[randFloor(threshold_maps.length)],
+				size = threshold_map.length;
+				for (var y = 0; y < height; y++) {
+					for (var x = 0; x < width; x++) {
+						var i = 4 * (y * width + x);
+						/* apply the tranformation to each color */
+						data[i] = ((data[i] * 17) / 255) < threshold_map[x % size][y %
+							size] ? 0 : 0xff;
+						data[i + 1] = ((data[i + 1] * 17) / 255) < threshold_map[x %
+							size][y % size] ? 0 : 0xff;
+						data[i + 2] = ((data[i + 2] * 17) / 255) < threshold_map[x %
+							size][y % size] ? 0 : 0xff;
+					}
 				}
-			}
-			this.bitmap.data = new Buffer(data);
-			if (isNodePattern(cb)) return cb.call(this, null, this);
-			else return this;
+				this.bitmap.data = new Buffer(data);
+				if (isNodePattern(cb)) return cb.call(this, null, this);
+				else return this;
 };
 
 
@@ -938,24 +942,6 @@ Jimp.prototype.redShift = function redShift(factor, cb) {
  * @param {number} factor - factor by which to reduce other channels and boost the channel set by to
  */
 Jimp.prototype.rgbShift = function rgbShift(from, to, factor, cb) {
-	if (!nullOrUndefined(from)) {
-		if ("string" != typeof from)
-			return throwError.call(this, "from must be a string", cb);
-		if (from != 'r' || from != 'g' || from != 'b' || from != 'red' || from != 'green' || from != 'blue')
-			return throwError.call(this, "from must be a string: 'red', 'green', 'blue', 'r', 'g', or 'b'", cb);
-	}
-	if (!nullOrUndefined(to)) {
-		if ("string" != typeof to)
-			return throwError.call(this, "to must be a string", cb);
-		if (to != 'r' || to != 'g' || to != 'b' || to != 'red' || to != 'green' || to != 'blue')
-			return throwError.call(this, "to must be a string: 'red', 'green', 'blue', 'r', 'g', or 'b'", cb);
-	}
-	if (!nullOrUndefined(factor)) {
-		if ("number" != typeof factor)
-			return throwError.call(this, "factor must be a number", cb);
-		if (factor < 2)
-			return throwError.call(this, "factor must be greater than 1", cb);
-	}
 	var width = this.bitmap.width,
 	height = this.bitmap.height,
 	data = this.bitmap.data;
@@ -991,6 +977,24 @@ Jimp.prototype.rgbShift = function rgbShift(from, to, factor, cb) {
 			break;
 		default:
 			to = randRange(0,2);
+	}
+	if (!nullOrUndefined(from)) {
+		if ("string" != typeof from)
+			return throwError.call(this, "from must be a string", cb);
+		if (from != 'r' || from != 'g' || from != 'b' || from != 'red' || from != 'green' || from != 'blue')
+			return throwError.call(this, "from must be a string: 'red', 'green', 'blue', 'r', 'g', or 'b'", cb);
+	}
+	if (!nullOrUndefined(to)) {
+		if ("string" != typeof to)
+			return throwError.call(this, "to must be a string", cb);
+		if (to != 'r' || to != 'g' || to != 'b' || to != 'red' || to != 'green' || to != 'blue')
+			return throwError.call(this, "to must be a string: 'red', 'green', 'blue', 'r', 'g', or 'b'", cb);
+	}
+	if (!nullOrUndefined(factor)) {
+		if ("number" != typeof factor)
+			return throwError.call(this, "factor must be a number", cb);
+		if (factor < 2)
+			return throwError.call(this, "factor must be greater than 1", cb);
 	}
 	for (var i = 0, size = width * height * 4; i < size; i += 4) {
 		var shift = data[i + from] + factor;

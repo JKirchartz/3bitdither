@@ -2,6 +2,12 @@
  * Helper Functions
  ***************************************************/
 
+function throwError(err, cb) {
+	if (typeof err === 'string') err = new Error(err);
+	if(typeof cb === 'function') return cb.call(this, err);
+	else throw err;
+}
+
 function adjustPixelError(data, i, error, multiplier) {
 	data[i] = data[i] + multiplier * error[0];
 	data[i + 1] = data[i + 1] + multiplier * error[1];

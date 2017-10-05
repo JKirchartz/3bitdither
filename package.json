@@ -11,7 +11,7 @@
     "grunt-contrib-concat": "^1.0.1"
   },
   "scripts": {
-    "test": "node test.js",
+    "test": "grunt && node test.js",
     "build": "grunt",
     "deploy": "git subtree push --prefix site origin gh-pages"
   },

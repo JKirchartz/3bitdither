@@ -3,12 +3,12 @@
  * @param {number} map - which matrix to use for the threshold map - 0: 3x3,  1: 4x4, 2: 8x8
  */
 Jimp.prototype.ditherBayer = function ditherBayer(map, cb) {
-	if (!nullOrUndefined(map)) {
-		if ("number" != typeof map)
-			return throwError.call(this, "map must be a number", cb);
-		if (map < 0 || map > 2)
-			return throwError.call(this, "map must be a number from 0 to 2", cb);
-	}
+	map = !nullOrUndefined(map) ? map : randFloor(3);
+	if ("number" !== typeof map)
+		return throwError.call(this, "map must be a number", cb);
+	if (map < 0 || map > 2)
+		return throwError.call(this, "map must be a number from 0 to 2", cb);
+
 	var width = this.bitmap.width,
 	height = this.bitmap.height,
 	data = this.bitmap.data,

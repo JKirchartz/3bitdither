@@ -5,12 +5,12 @@
  * @param {boolean} dir - direction to shift colors, true for RGB->GBR, false for RGB->BRG.
  */
 Jimp.prototype.colorShift = function colorShift(dir, cb) {
-	if (!nullOrUndefined(dir))
-		return throwError.call(this, "dir must be truthy or falsey", cb);
 	var width = this.bitmap.width,
 	height = this.bitmap.height,
 	data = this.bitmap.data;
 	dir = !nullOrUndefined(dir) ? dir : coinToss();
+	if (!nullOrUndefined(dir) && typeof (!!dir) === 'boolean')
+		return throwError.call(this, "dir must be truthy or falsey", cb);
 	for (var i = 0, size = width * height * 4; i < size; i += 4) {
 		var r = data[i],
 			g = data[i + 1],

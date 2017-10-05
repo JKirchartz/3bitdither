@@ -3,17 +3,16 @@
  * @param {number} size - a number greater than 1 representing pixel size.
  */
 Jimp.prototype.dither8Bit = function dither8Bit(size, cb) {
-	if (!nullOrUndefined(size)) {
-		if ("number" != typeof size)
-			return throwError.call(this, "size must be a number", cb);
-		if (size < 2)
-			return throwError.call(this, "size must be greater than 1", cb);
-	}
+	size = !nullOrUndefined(size) ? size : randRange(4, 15);
+	if (typeof size !== 'number')
+		return throwError.call(this, "size must be a number " + size, cb);
+	if (size < 2)
+		return throwError.call(this, "size must be greater than 1", cb);
+
 	var width = this.bitmap.width,
 	height = this.bitmap.height,
 	data = this.bitmap.data,
 	sum_r, sum_g, sum_b, avg_r, avg_g, avg_b;
-	size = !nullOrUndefined(size) ? size : 4;
 
 	for (var y = 0; y < height; y += size) {
 		for (var x = 0; x < width; x += size) {

@@ -74,6 +74,15 @@ JIMP (included in the node.js branch) is included under the MIT license (with Op
 Glitchy3bitDither is presented under the [GPL3.0 license](gpl-3.0.txt), copyleft 2013 JKirchartz, except as noted.
 
 
+## Development
+
+build with `npm build`
+
+test with `npm test`
+
+manually inspect images output in current directory
+
+
 # I am open to any and all Pull Requests
 
 please read [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
