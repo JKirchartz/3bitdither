@@ -26,7 +26,7 @@ function adjustPixelError(data, i, error, multiplier) {
 }
 
 function nullOrUndefined(item) {
-	if (typeof item !== 'undefined' || item === null) {
+	if (typeof item === 'undefined' || item === null) {
 		return true;
 	}
 	return false;
@@ -166,9 +166,10 @@ Jimp.prototype.colorShift = function colorShift(dir, cb) {
 	var width = this.bitmap.width,
 	height = this.bitmap.height,
 	data = this.bitmap.data;
-	dir = !nullOrUndefined(dir) ? dir : coinToss();
-	if (!nullOrUndefined(dir) && typeof (!!dir) === 'boolean')
+	dir = nullOrUndefined(dir) ? coinToss() : dir;
+	if (!nullOrUndefined(dir) && typeof (!!dir) !== 'boolean') {
 		return throwError.call(this, "dir must be truthy or falsey", cb);
+	}
 	for (var i = 0, size = width * height * 4; i < size; i += 4) {
 		var r = data[i],
 			g = data[i + 1],
@@ -215,11 +216,13 @@ Jimp.prototype.colorShift2 = function colorShift2(dir, cb) {
  * @param {number} size - a number greater than 1 representing pixel size.
  */
 Jimp.prototype.dither8Bit = function dither8Bit(size, cb) {
-	size = !nullOrUndefined(size) ? size : randRange(4, 15);
-	if (typeof size !== 'number')
+	size = nullOrUndefined(size) ? randRange(4, 15) : size;
+	if (typeof size !== 'number') {
 		return throwError.call(this, "size must be a number " + size, cb);
-	if (size < 2)
+	}
+	if (size < 2) {
 		return throwError.call(this, "size must be greater than 1", cb);
+	}
 
 	var width = this.bitmap.width,
 	height = this.bitmap.height,
@@ -978,23 +981,29 @@ Jimp.prototype.rgbShift = function rgbShift(from, to, factor, cb) {
 		default:
 			to = randRange(0,2);
 	}
-	if (!nullOrUndefined(from)) {
-		if ("string" != typeof from)
+	if (!nullOrUndefined(from) && typeof from !== 'number') {
+		if ("string" !== typeof from) {
 			return throwError.call(this, "from must be a string", cb);
-		if (from != 'r' || from != 'g' || from != 'b' || from != 'red' || from != 'green' || from != 'blue')
+		}
+		if (from !== 'r' || from !== 'g' || from !== 'b' || from !== 'red' || from !== 'green' || from !== 'blue') {
 			return throwError.call(this, "from must be a string: 'red', 'green', 'blue', 'r', 'g', or 'b'", cb);
+		}
 	}
-	if (!nullOrUndefined(to)) {
-		if ("string" != typeof to)
+	if (!nullOrUndefined(to) && typeof from !== 'number') {
+		if ("string" !== typeof to) {
 			return throwError.call(this, "to must be a string", cb);
-		if (to != 'r' || to != 'g' || to != 'b' || to != 'red' || to != 'green' || to != 'blue')
+		}
+		if (to !== 'r' || to !== 'g' || to !== 'b' || to !== 'red' || to !== 'green' || to !== 'blue') {
 			return throwError.call(this, "to must be a string: 'red', 'green', 'blue', 'r', 'g', or 'b'", cb);
+		}
 	}
-	if (!nullOrUndefined(factor)) {
-		if ("number" != typeof factor)
-			return throwError.call(this, "factor must be a number", cb);
-		if (factor < 2)
+	if (!nullOrUndefined(factor) && typeof from !== 'number') {
+		if ("number" !== typeof factor) {
+				return throwError.call(this, "factor must be a number", cb);
+		}
+		if (factor < 2) {
 			return throwError.call(this, "factor must be greater than 1", cb);
+		}
 	}
 	for (var i = 0, size = width * height * 4; i < size; i += 4) {
 		var shift = data[i + from] + factor;

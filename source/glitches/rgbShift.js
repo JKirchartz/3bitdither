@@ -42,23 +42,29 @@ Jimp.prototype.rgbShift = function rgbShift(from, to, factor, cb) {
 		default:
 			to = randRange(0,2);
 	}
-	if (!nullOrUndefined(from)) {
-		if ("string" != typeof from)
+	if (!nullOrUndefined(from) && typeof from !== 'number') {
+		if ("string" !== typeof from) {
 			return throwError.call(this, "from must be a string", cb);
-		if (from != 'r' || from != 'g' || from != 'b' || from != 'red' || from != 'green' || from != 'blue')
+		}
+		if (from !== 'r' || from !== 'g' || from !== 'b' || from !== 'red' || from !== 'green' || from !== 'blue') {
 			return throwError.call(this, "from must be a string: 'red', 'green', 'blue', 'r', 'g', or 'b'", cb);
+		}
 	}
-	if (!nullOrUndefined(to)) {
-		if ("string" != typeof to)
+	if (!nullOrUndefined(to) && typeof from !== 'number') {
+		if ("string" !== typeof to) {
 			return throwError.call(this, "to must be a string", cb);
-		if (to != 'r' || to != 'g' || to != 'b' || to != 'red' || to != 'green' || to != 'blue')
+		}
+		if (to !== 'r' || to !== 'g' || to !== 'b' || to !== 'red' || to !== 'green' || to !== 'blue') {
 			return throwError.call(this, "to must be a string: 'red', 'green', 'blue', 'r', 'g', or 'b'", cb);
+		}
 	}
-	if (!nullOrUndefined(factor)) {
-		if ("number" != typeof factor)
-			return throwError.call(this, "factor must be a number", cb);
-		if (factor < 2)
+	if (!nullOrUndefined(factor) && typeof from !== 'number') {
+		if ("number" !== typeof factor) {
+				return throwError.call(this, "factor must be a number", cb);
+		}
+		if (factor < 2) {
 			return throwError.call(this, "factor must be greater than 1", cb);
+		}
 	}
 	for (var i = 0, size = width * height * 4; i < size; i += 4) {
 		var shift = data[i + from] + factor;

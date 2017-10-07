@@ -15,7 +15,7 @@ function adjustPixelError(data, i, error, multiplier) {
 }
 
 function nullOrUndefined(item) {
-	if (typeof item !== 'undefined' || item === null) {
+	if (typeof item === 'undefined' || item === null) {
 		return true;
 	}
 	return false;
