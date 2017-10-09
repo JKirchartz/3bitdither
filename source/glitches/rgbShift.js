@@ -1,4 +1,3 @@
-
 /**
  * RGB Shift
  * @param {string} from - channel to shift color value from, 'r', 'g', or 'b'

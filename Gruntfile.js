@@ -2,6 +2,7 @@ module.exports = function (grunt) {
 	"use strict";
 
 	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
 
 	grunt.initConfig({
 		concat: {
@@ -15,9 +16,14 @@ module.exports = function (grunt) {
 					]
 				}
 			}
-		}});
+		},
+		jshint: {
+			dest: "dest/**.js"
+		}
+	});
 	// Default task(s).
 	grunt.registerTask('default', [ 'concat' ]);
+	grunt.registerTask('check', [ 'concat', 'jshint' ]);
+	grunt.registerTask('deploy', [ 'concat', 'jshint' ]);
 
-	// grunt.registerTask('server', ['default', 'connect:livereload', 'open', 'watch']);
 };

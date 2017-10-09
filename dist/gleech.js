@@ -6,7 +6,12 @@
  *
  * Distributed under terms of the GPL 3.0 (General Public License) license.
  */
-var Jimp = require('jimp');
+
+'use strict';
+
+if( typeof module !== 'undefined' && module.exports ) {
+	var Jimp = require('jimp');
+}
 
 
 /***************************************************
@@ -650,24 +655,148 @@ Jimp.prototype.ditherRandom3 = function ditherRandom3(cb) {
 
 
 /**
- * dumbSortRows
+ * drumrollHorizontal
  */
-Jimp.prototype.dumbsSortRows = function dumbsSortRows(cb) {
-        var width = this.bitmap.width,
-        height = this.bitmap.height,
-        data = new Uint32Array(this.bitmap.data);
+Jimp.prototype.drumrollHorizontal = function drumrollHorizontal(cb) {
+	var width = this.bitmap.width,
+	height = this.bitmap.height,
+	data = this.bitmap.data,
+	roll = 0;
+	for (var x = 0; x < width; x++) {
+		if (Math.random() < 0.05) roll = randFloor(height);
+		if (Math.random() < 0.05) roll = 0;
 
-        for (var i = 0, size = data.length; i < size; i += width) {
-                var da = data.subarray(i, i + width);
-                Array.prototype.sort.call(da);
-                data.set(da, i);
-        }
+		for (var y = 0; y < height; y++) {
+			var idx = (x + y * width) * 4;
 
-        this.bitmap.data = new Buffer(data);
-        if (isNodePattern(cb)) return cb.call(this, null, this);
-        else return this;
+			var x2 = x + roll;
+			if (x2 > width - 1) x2 -= width;
+			var idx2 = (x2 + y * width) * 4;
+
+			for (var c = 0; c < 4; c++) {
+				data[idx2 + c] = data[idx + c];
+			}
+		}
+	}
+
+	this.bitmap.data = new Buffer(data);
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
 };
 
+
+/**
+ * drumrollHorizontalWave
+ */
+Jimp.prototype.drumrollHorizontalWave = function drumrollHorizontalWave(cb) {
+	// borrowed from https://github.com/ninoseki/glitched-canvas & modified with cosine
+	var width = this.bitmap.width,
+	height = this.bitmap.height,
+	data = this.bitmap.data,
+	roll = 0;
+	for (var x = 0; x < width; x++) {
+		if (Math.random() > 0.95) roll = Math.floor(Math.cos(x) * (height * 2));
+		if (Math.random() > 0.98) roll = 0;
+
+		for (var y = 0; y < height; y++) {
+			var idx = (x + y * width) * 4;
+
+			var x2 = x + roll;
+			if (x2 > width - 1) x2 -= width;
+			var idx2 = (x2 + y * width) * 4;
+
+			for (var c = 0; c < 4; c++) {
+				data[idx2 + c] = data[idx + c];
+			}
+		}
+	}
+
+	this.bitmap.data = new Buffer(data);
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
+};
+
+/**
+ * drumrollVertical
+ */
+Jimp.prototype.drumrollVertical = function drumrollVertical(cb) {
+	// borrowed from https://github.com/ninoseki/glitched-canvas
+	var width = this.bitmap.width,
+	height = this.bitmap.height,
+	data = this.bitmap.data,
+	roll = 0;
+	for (var x = 0; x < width; x++) {
+		if (Math.random() > 0.95) roll = randFloor(height);
+		if (Math.random() > 0.95) roll = 0;
+
+		for (var y = 0; y < height; y++) {
+			var idx = (x + y * width) * 4;
+
+			var y2 = y + roll;
+			if (y2 > height - 1) y2 -= height;
+			var idx2 = (x + y2 * width) * 4;
+
+			for (var c = 0; c < 4; c++) {
+				data[idx2 + c] = data[idx + c];
+			}
+		}
+	}
+
+	this.bitmap.data = new Buffer(data);
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
+};
+
+/**
+ * drumrollVerticalWave
+ */
+Jimp.prototype.drumrollVerticalWave = function drumrollVerticalWave(cb) {
+	// borrowed from https://github.com/ninoseki/glitched-canvas & modified w/ cosine
+	var width = this.bitmap.width,
+	height = this.bitmap.height,
+	data = this.bitmap.data,
+	roll = 0;
+
+	for (var x = 0; x < width; x++) {
+		if (Math.random() > 0.95) roll = Math.floor(Math.cos(x) * (height * 2));
+		if (Math.random() > 0.98) roll = 0;
+
+		for (var y = 0; y < height; y++) {
+			var idx = (x + y * width) * 4;
+
+			var y2 = y + roll;
+			if (y2 > height - 1) y2 -= height;
+			var idx2 = (x + y2 * width) * 4;
+
+			for (var c = 0; c < 4; c++) {
+				data[idx2 + c] = data[idx + c];
+			}
+		}
+	}
+
+	this.bitmap.data = new Buffer(data);
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
+};
+
+/**
+ * dumbSortRows
+ */
+Jimp.prototype.dumbSortRows = function dumbsSortRows(cb) {
+	var width = this.bitmap.width,
+	height = this.bitmap.height,
+	data = new Uint32Array(this.bitmap.data);
+
+	for (var i = 0, size = data.length; i < size; i += width) {
+		var da = data.subarray(i, i + width);
+		Array.prototype.sort.call(da);
+		data.set(da, i);
+	}
+
+	this.bitmap.data = new Buffer(data);
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
+};
 
 
 /**
@@ -845,16 +974,16 @@ Jimp.prototype.greenShift = function greenShift(factor, cb) {
 /**
  * inverse
  */
-Jimp.prototype.inverse = function inverse() {
-        var width = this.bitmap.width,
-        height = this.bitmap.height,
-        data = new Uint32Array(this.bitmap.data);
-        for (var i = 0; i < data.length; i++) {
-                data[i] = ~ data[i] | 0xFF000000;
-        }
-        this.bitmap.data = new Buffer(data);
-        if (isNodePattern(cb)) return cb.call(this, null, this);
-        else return this;
+Jimp.prototype.inverse = function inverse(cb) {
+	var width = this.bitmap.width,
+	height = this.bitmap.height,
+	data = new Uint32Array(this.bitmap.data);
+	for (var i = 0; i < data.length; i++) {
+		data[i] = ~ data[i] | 0xFF000000;
+	}
+	this.bitmap.data = new Buffer(data);
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
 };
 
 
@@ -895,20 +1024,52 @@ Jimp.prototype.pixelFunk = function pixelFunk(pixelation, cb) {
 
 
 /**
+ * pixelSort
+ */
+Jimp.prototype.pixelSort = function pixelSort(cb) {
+	var width = this.bitmap.width,
+	height = this.bitmap.height,
+	data = new Uint32Array(this.bitmap.data);
+
+	var upper = 0xFFAAAAAA, lower = 0xFF333333;
+	for (var i = 0, size = data.length; i < size; i += width) {
+		var row = Array.apply([], data.subarray(i, i + width));
+		var low = 0, high = 0;
+		for (var j in row) {
+			if (!high && !low && row[j] >= low) {
+				low = j;
+			}
+			if (low && !high && row[j] >= high) {
+				high = j;
+			}
+		}
+		if (low) {
+			var da = row.slice(low, high);
+			Array.prototype.sort.call(da, leftSort);
+			data.set(da, (i + low) % (height * width));
+		}
+	}
+
+	this.bitmap.data = new Buffer(data);
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
+};
+
+/**
  * randomSortRows
  */
 Jimp.prototype.randomSortRows = function randomSortRows(cb) {
-        var width = this.bitmap.width,
-        height = this.bitmap.height,
-        data = new Uint32Array(this.bitmap.data);
-        for (var i = 0, size = data.length; i < size; i += width) {
-                var da = data.subarray(i, i + width);
-                Array.prototype.sort.call(da, coinToss);
-                data.set(da, i);
-        }
-        this.bitmap.data = new Buffer(data);
-        if (isNodePattern(cb)) return cb.call(this, null, this);
-        else return this;
+	var width = this.bitmap.width,
+	height = this.bitmap.height,
+	data = new Uint32Array(this.bitmap.data);
+	for (var i = 0, size = data.length; i < size; i += width) {
+		var da = data.subarray(i, i + width);
+		Array.prototype.sort.call(da, coinToss);
+		data.set(da, i);
+	}
+	this.bitmap.data = new Buffer(data);
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
 };
 
 /**
@@ -937,6 +1098,60 @@ Jimp.prototype.redShift = function redShift(factor, cb) {
 	else return this;
 };
 
+/**
+ * rgb_glitch
+ * @param {number} offset - pixels to offset
+ * @param {number} rgb - number representing R (0), G (1), or B (2)
+ * @param {boolean} direction - shift pixels left or right, truthy for left, falsey for right
+ */
+Jimp.prototype.rgb_glitch = function rgb_glitch(offset, rgb, dir, cb) {
+	var width = this.bitmap.width,
+	height = this.bitmap.height,
+	data = this.bitmap.data;
+	offset = nullOrUndefined(offset) ? randRange(10, width - 10) : offset % width;
+	rgb = !nullOrUndefined(rgb) ? rgb % 3 : offset % 3;
+	dir = nullOrUndefined(dir) ? coinToss() : !!dir;
+	for (var y = 0; y < height; y++) {
+		for (var x = 0; x < width; x++) {
+			var index = ((width * y) + x) * 4,
+				red = data[index],
+				green = data[index + 1],
+				blue = data[index + 2];
+				if (dir) {
+					if (rgb === 0) {
+						data[index + offset] = red;
+						data[index + offset + 1] = green;
+						data[index] = blue;
+					}else if (rgb === 1) {
+						data[index] = red;
+						data[index + offset + 1] = green;
+						data[index + offset] = blue;
+					} else {
+						data[index + offset] = red;
+						data[index + 1] = green;
+						data[index + offset] = blue;
+					}
+				} else {
+					if (rgb === 0) {
+						data[index - offset + 1] = red;
+						data[index - offset] = green;
+						data[index] = blue;
+					}else if (rgb === 1) {
+						data[index + 1] = red;
+						data[index - offset] = green;
+						data[index - offset] = blue;
+					} else {
+						data[index - offset + 1] = red;
+						data[index] = green;
+						data[index - offset] = blue;
+					}
+				}
+		}
+	}
+	this.bitmap.data = new Buffer(data);
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
+};
 
 /**
  * RGB Shift
@@ -1031,6 +1246,43 @@ Jimp.prototype.rgbShift = function rgbShift(from, to, factor, cb) {
 
 
 /**
+ * scanlines
+ * @param {number} type - 0 for xor, 1 for or, or 2 for invert
+ * @param {number} size - size between scanlines, numbers between 3 and 15 look nice
+ * @param {number} option - 0, 1, 2, or 3, to determine which value to use with Or or Xor
+ */
+Jimp.prototype.scanlines = function scanlines(type, size, option, cb) {
+	var width = this.bitmap.width,
+	height = this.bitmap.height,
+	data = new Uint32Array(this.bitmap.data),
+	xorOptions = [0x00555555, 0x00FF00FF00, 0x00F0F0F0, 0x00333333],
+	orOptions = [0xFF555555, 0xFFFF00FF00, 0xFFF0F0F0, 0xFF333333];
+
+	type = nullOrUndefined(type) ? randRange(0, 3) : type % 3;
+	size = nullOrUndefined(size) ? randRange(3, 15) : size;
+	var xorNum = nullOrUndefined(option) ? randChoice(xorOptions) : xorOptions[option];
+	var orNum = nullOrUndefined(option) ? randChoice(orOptions) : orOptions[option];
+	for (var i = 0, l = data.length; i < l; i += (width * size)) {
+		var row = Array.apply([], data.subarray(i, i + width));
+		for (var p in row) {
+			if (type === 0) {
+				row[p] = row[p] ^ xorNum;
+			} else if (type === 1) {
+				row[p] = row[p] | orNum;
+			} else {
+				// invert
+				row[p] = ~ row[p] | 0xFF000000;
+			}
+		}
+		data.set(row, i);
+	}
+
+	this.bitmap.data = new Buffer(data);
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
+};
+
+/**
  * Select Slice
  * @param {number} selection - Algorithm to use to make an automatic slice (currently 0 or 1)
  */
@@ -1071,26 +1323,26 @@ Jimp.prototype.selectSlice = function selectSlice(selection, cb) {
  * @param {integer} end - pixel to end at
  */
 Jimp.prototype.shortdumbsort = function shortdumbsort(start, end, cb) {
-        var width = this.bitmap.width,
-        height = this.bitmap.height,
-        data = new Uint32Array(this.bitmap.data.buffer);
-        var mm;
-        if (nullOrUndefined(start) && nullOrUndefined(end)) {
-                mm = randMinMax(0, imageData.width * imageData.height);
-                mm = randMinMax2(mm[0], mm[1]);
-        } else if(!nullOrUndefined(start) && nullOrUndefined(end)) {
-                mm = randMinMax(start, randMinMax2(width * height)[1]);
-        } else if(nullOrUndefined(start) && !nullOrUndefined(end)) {
-                mm = randMinMax(randMinMax2((width * height) - end)[0], end);
-        } else {
-                mm = [start, end];
-        }
-        var da = data.subarray(mm[0], mm[1]);
-        Array.prototype.sort.call(da);
-        data.set(da, mm[0]);
-        this.bitmap.data = new Buffer(data);
-        if (isNodePattern(cb)) return cb.call(this, null, this);
-        else return this;
+	var width = this.bitmap.width,
+	height = this.bitmap.height,
+	data = new Uint32Array(this.bitmap.data.buffer);
+	var mm;
+	if (nullOrUndefined(start) && nullOrUndefined(end)) {
+		mm = randMinMax(0, width * height);
+		mm = randMinMax2(mm[0], mm[1]);
+	} else if(!nullOrUndefined(start) && nullOrUndefined(end)) {
+		mm = randMinMax(start, randRange(start, width * height));
+	} else if(nullOrUndefined(start) && !nullOrUndefined(end)) {
+		mm = randMinMax(randRange(0, (width * height) - end), end);
+	} else {
+		mm = [start, end];
+	}
+	var da = data.subarray(mm[0], mm[1]);
+	Array.prototype.sort.call(da);
+	data.set(da, mm[0]);
+	this.bitmap.data = new Buffer(data);
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
 };
 
 /**
@@ -1099,31 +1351,31 @@ Jimp.prototype.shortdumbsort = function shortdumbsort(start, end, cb) {
  * @param {integer} end - pixel to end at
  */
 Jimp.prototype.shortsort = function shortsort(dir, start, end, cb) {
-        var width = this.bitmap.width,
-        height = this.bitmap.height,
-        data = new Uint32Array(this.bitmap.data),
-        cut, mm;
-        if (nullOrUndefined(start) && nullOrUndefined(end)) {
-                mm = randMinMax(0, imageData.width * imageData.height);
-                mm = randMinMax2(mm[0], mm[1]);
-        } else if(!nullOrUndefined(start) && nullOrUndefined(end)) {
-                mm = randMinMax(start, randMinMax2(width * height)[1]);
-        } else if(nullOrUndefined(start) && !nullOrUndefined(end)) {
-                mm = randMinMax(randMinMax2((width * height) - end)[0], end);
-        } else {
-                mm = [start, end];
-        }
-        cut = data.subarray(mm[0], mm[1]);
-        dir = nullOrUndefined(dir)? coinToss() : dir;
-        if (dir) {
-                Array.prototype.sort.call(cut, leftSort);
-        } else {
-                Array.prototype.sort.call(cut, rightSort);
-        }
+	var width = this.bitmap.width,
+	height = this.bitmap.height,
+	data = new Uint32Array(this.bitmap.data),
+	cut, mm;
+	if (nullOrUndefined(start) && nullOrUndefined(end)) {
+		mm = randMinMax(0, width * height);
+		mm = randMinMax2(mm[0], mm[1]);
+	} else if(!nullOrUndefined(start) && nullOrUndefined(end)) {
+		mm = randMinMax(start, randMinMax2(width * height)[1]);
+	} else if(nullOrUndefined(start) && !nullOrUndefined(end)) {
+		mm = randMinMax(randMinMax2((width * height) - end)[0], end);
+	} else {
+		mm = [start, end];
+	}
+	cut = data.subarray(mm[0], mm[1]);
+	dir = nullOrUndefined(dir)? coinToss() : dir;
+	if (dir) {
+		Array.prototype.sort.call(cut, leftSort);
+	} else {
+		Array.prototype.sort.call(cut, rightSort);
+	}
 
-        this.bitmap.data = new Buffer(data.buffer);
-        if (isNodePattern(cb)) return cb.call(this, null, this);
-        else return this;
+	this.bitmap.data = new Buffer(data.buffer);
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
 };
 
 /**
@@ -1163,34 +1415,35 @@ Jimp.prototype.slice = function slice(cutstart, cutend, cb) {
  * @param {integer} end - pixel to end at
  */
 Jimp.prototype.slicesort = function slicesort(dir, start, end, cb) {
-        var width = this.bitmap.width,
-        height = this.bitmap.height,
-        data = new Uint32Array(this.bitmap.data);
-        dir = nullOrUndefined(dir)? coinToss() : dir;
+	var width = this.bitmap.width,
+	height = this.bitmap.height,
+	mm,
+	data = new Uint32Array(this.bitmap.data);
+	dir = nullOrUndefined(dir)? coinToss() : dir;
 
-        if (nullOrUndefined(start) && nullOrUndefined(end)) {
-                mm = randMinMax(0, imageData.width * imageData.height);
-                mm = randMinMax2(mm[0], mm[1]);
-        } else if(!nullOrUndefined(start) && nullOrUndefined(end)) {
-                mm = randMinMax(start, randMinMax2(width * height)[1]);
-        } else if(nullOrUndefined(start) && !nullOrUndefined(end)) {
-                mm = randMinMax(randMinMax2((width * height) - end)[0], end);
-        } else {
-                mm = [start, end];
-        }
+	if (nullOrUndefined(start) && nullOrUndefined(end)) {
+		mm = randMinMax(0, width * height);
+		mm = randMinMax2(mm[0], mm[1]);
+	} else if(!nullOrUndefined(start) && nullOrUndefined(end)) {
+		mm = randMinMax(start, randMinMax2(width * height)[1]);
+	} else if(nullOrUndefined(start) && !nullOrUndefined(end)) {
+		mm = randMinMax(randMinMax2((width * height) - end)[0], end);
+	} else {
+		mm = [start, end];
+	}
 
-        var cut = data.subarray(mm[0], mm[1]),
-        offset = Math.abs(randRound(data.length) - cut.length) % data.length;
-        if(dir) {
-                Array.prototype.sort.call(cut, leftSort);
-        } else {
-                Array.prototype.sort.call(cut, rightSort);
-        }
-        imageData.data.set(data.buffer, coinToss() ? offset : mm[0]);
+	var cut = data.subarray(mm[0], mm[1]),
+	offset = Math.abs(randRound(data.length) - cut.length) % data.length;
+	if(dir) {
+		Array.prototype.sort.call(cut, leftSort);
+	} else {
+		Array.prototype.sort.call(cut, rightSort);
+	}
+	data.set(data.buffer, coinToss() ? offset : mm[0]);
 
-        this.bitmap.data = new Buffer(data);
-        if (isNodePattern(cb)) return cb.call(this, null, this);
-        else return this;
+	this.bitmap.data = new Buffer(data);
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
 };
 
 /**
@@ -1198,41 +1451,39 @@ Jimp.prototype.slicesort = function slicesort(dir, start, end, cb) {
  * @param {boolean} direction - T/F for Left or Right
  */
 Jimp.prototype.sort = function sort(dir, cb) {
-        var width = this.bitmap.width,
-        height = this.bitmap.height,
-        data = new Uint32Array(this.bitmap.data);
-        dir = nullOrUndefined(dir)? coinToss() : dir;
+	var width = this.bitmap.width,
+	height = this.bitmap.height,
+	data = new Uint32Array(this.bitmap.data);
+	dir = nullOrUndefined(dir)? coinToss() : dir;
 
-        if (dir) {
-                Array.prototype.sort.call(data, leftSort);
-        } else {
-                Array.prototype.sort.call(data, rightSort);
-        }
+	if (dir) {
+		Array.prototype.sort.call(data, leftSort);
+	} else {
+		Array.prototype.sort.call(data, rightSort);
+	}
 
-        this.bitmap.data = new Buffer(data);
-        if (isNodePattern(cb)) return cb.call(this, null, this);
-        else return this;
+	this.bitmap.data = new Buffer(data);
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
 };
 
 /**
  * sortRows
- * @param {integer} start - pixel to start at
- * @param {integer} end - pixel to end at
  */
-Jimp.prototype.sortRows = function sortRows() {
-        var width = this.bitmap.width,
-        height = this.bitmap.height,
-        data = new Uint32Array(this.bitmap.data);
+Jimp.prototype.sortRows = function sortRows(cb) {
+	var width = this.bitmap.width,
+	height = this.bitmap.height,
+	data = new Uint32Array(this.bitmap.data);
 
-        for (var i = 0, size = data.length + 1; i < size; i += width) {
-                var da = data.subarray(i, i + width);
-                Array.prototype.sort.call(da, leftSort);
-                da.copyWithin(data, i);
-        }
+	for (var i = 0, size = data.length + 1; i < size; i += width) {
+		var da = data.subarray(i, i + width);
+		Array.prototype.sort.call(da, leftSort);
+		da.copyWithin(data, i);
+	}
 
-        this.bitmap.data = new Buffer(data);
-        if (isNodePattern(cb)) return cb.call(this, null, this);
-        else return this;
+	this.bitmap.data = new Buffer(data);
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
 };
 
 
@@ -1243,30 +1494,31 @@ Jimp.prototype.sortRows = function sortRows() {
  * @param {integer} end - pixel to end at
  */
 Jimp.prototype.sortStripe = function sortStripe(dir, start, end, cb) {
-        var width = this.bitmap.width,
-        height = this.bitmap.height,
-        data = new Uint32Array(this.bitmap.data);
+	var width = this.bitmap.width,
+	height = this.bitmap.height,
+	data = new Uint32Array(this.bitmap.data),
+	mm;
 
-        if (nullOrUndefined(start) && nullOrUndefined(end)) {
-                mm = randMinMax(0, imageData.width * imageData.height);
-                mm = randMinMax2(mm[0], mm[1]);
-        } else if(!nullOrUndefined(start) && nullOrUndefined(end)) {
-                mm = randMinMax(start, randMinMax2(width * height)[1]);
-        } else if(nullOrUndefined(start) && !nullOrUndefined(end)) {
-                mm = randMinMax(randMinMax2((width * height) - end)[0], end);
-        } else {
-                mm = [start, end];
-        }
+	if (nullOrUndefined(start) && nullOrUndefined(end)) {
+		mm = randMinMax(0, width * height);
+		mm = randMinMax2(mm[0], mm[1]);
+	} else if(!nullOrUndefined(start) && nullOrUndefined(end)) {
+		mm = randMinMax(start, randMinMax2(width * height)[1]);
+	} else if(nullOrUndefined(start) && !nullOrUndefined(end)) {
+		mm = randMinMax(randMinMax2((width * height) - end)[0], end);
+	} else {
+		mm = [start, end];
+	}
 
-        for (var i = 0, size = data.length + 1; i < size; i += width) {
-                var da = data.subarray(i + mm[0], i + mm[1]);
-                Array.prototype.sort.call(da, leftSort);
-                da.copyWithin(data, i + mm[0]);
-        }
+	for (var i = 0, size = data.length + 1; i < size; i += width) {
+		var da = data.subarray(i + mm[0], i + mm[1]);
+		Array.prototype.sort.call(da, leftSort);
+		da.copyWithin(data, i + mm[0]);
+	}
 
-        this.bitmap.data = new Buffer(data);
-        if (isNodePattern(cb)) return cb.call(this, null, this);
-        else return this;
+	this.bitmap.data = new Buffer(data);
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
 };
 
 /**
@@ -1379,4 +1631,6 @@ Jimp.prototype.superSlice = function superSlice(iter, cb) {
 };
 
 
-module.exports = Jimp;
+if( typeof module !== 'undefined' && module.exports ) {
+	module.exports = Jimp;
+}

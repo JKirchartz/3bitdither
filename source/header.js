@@ -6,5 +6,10 @@
  *
  * Distributed under terms of the GPL 3.0 (General Public License) license.
  */
-var Jimp = require('jimp');
+
+'use strict';
+
+if( typeof module !== 'undefined' && module.exports ) {
+	var Jimp = require('jimp');
+}
 
