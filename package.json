@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "Image glitching & dithering in NodeJS",
   "main": "gleech.js",
+	"contributors": [
+		{ "name": "Nolan Caudill", "https://github.com/mncaudill/3bitdither" },
+		{ "name": "J. Kirchartz", "me@jkirchartz.com", "http://jkirchartz.com" }
+	],
   "dependencies": {
     "jimp": "^0.2.27"
   },
@@ -26,7 +30,6 @@
     "image processing",
     "aesthetic"
   ],
-  "author": "JKirchartz",
   "license": "GPL 3.0",
   "bugs": {
     "url": "https://github.com/jkirchartz/Glitchy3bitDither/issues"
