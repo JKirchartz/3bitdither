@@ -4,8 +4,8 @@
   "description": "Image glitching & dithering in NodeJS",
   "main": "gleech.js",
   "contributors": [
-    { "name": "Nolan Caudill", "https://github.com/mncaudill/3bitdither" },
-    { "name": "J. Kirchartz", "me@jkirchartz.com", "http://jkirchartz.com" }
+    { "name": "Nolan Caudill", "url": "https://github.com/mncaudill/3bitdither" },
+    { "name": "J. Kirchartz", "email": "me@jkirchartz.com", "url": "http://jkirchartz.com" }
   ],
   "dependencies": {
     "jimp": "^0.2.27"
