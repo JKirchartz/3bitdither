@@ -53,13 +53,16 @@ document.body.appendChild(out);
 3. namespace
 4. better function names
 5. better comments
-6. add paremeters for granular control - but use randomness as default functionality if no params are used
 7. Add glitches:
   - scan lines (1px black line the entire width every N lines)
   - move each "row" in opposite directions (1px at a time)
   - kaleidoscope
-8. nodejs/cli - for batch/bots/etc. (via [CamanJS](http://camanjs.com/))
+8. nodejs/cli - for batch/bots/etc. (via JIMP)
 
+## Release Notes
+
+v0.1.0 has added glitch functions to jimp, and mostly successfully emulates Glitchy3bitDither in node.js.
+There are still some kinks to work out in a few of the glitch functions, use at your own peril.
 
 ## Run locally
 
