@@ -1,40 +1,33 @@
 #!/usr/bin/env node
+'use strict';
 /*
- * index.js
+ * Gleech
  * Copyright (C) 2017 jkirchartz <me@jkirchartz.com>
  *
  * Distributed under terms of the GPL3.0 license.
  */
-'use strict';
 var gleech = require('./dist/gleech.js');
-var vorpal = require('vorpal')();
+var cmdr = require('commander');
 
-vorpal.history('gleech');
-
-vorpal
-.command('glitch <input> <output> [operation] [parameters...]',
-		'Glitches an image with optional type and parameters')
-.action(function(args, callback) {
-	var input = args.input;
-	var output = args.output;
-	var operation = args.operation;
-	var parameters = args.parameters;
-
+cmdr
+.command('glitch <input> <output> [operation] [parameters...]')
+.description('Glitches an image with optional type and parameters')
+.action(function(input, output, operation, parameters) {
 	gleech.read(input, function(err, image) {
 		if (operation && parameters) {
-			image[operation](parameters);
+			image[operation].apply(this, parameters);
 		} else if (operation && !parameters) {
 			image[operation]();
 		} else {
-			vorpal.log("please provide a function name");
+			console.log("please provide a function name");
 		}
 		image.write(output);
 	});
-	callback();
 });
 
-vorpal.command('list', 'Lists available functions')
-.action(function(args, callback) {
+cmdr.command('list')
+.description('Lists available functions')
+.action(function() {
 	var output = "";
 	output += ('\nGlitches:\n\n');
 	for (var prop in gleech.prototype) {
@@ -44,16 +37,13 @@ vorpal.command('list', 'Lists available functions')
 		}
 	}
 	output += ('\n\nJimp functions:\n\n');
-	for (var prop in gleech.prototype) {
-		if (typeof gleech.prototype[prop] === 'function' &&
-				! gleech.prototype[prop].name){
-			output += String(prop) + ' ';
+	for (var prop2 in gleech.prototype) {
+		if (typeof gleech.prototype[prop2] === 'function' &&
+				! gleech.prototype[prop2].name){
+			output += String(prop2) + ' ';
 		}
 	}
-	vorpal.log(output);
-	callback();
+	console.log(output);
 });
 
-vorpal.delimiter('gleech$').show();
-
-
+cmdr.version('0.1.0').parse(process.argv);
