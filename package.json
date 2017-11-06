@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "description": "Image glitching & dithering in NodeJS",
   "main": "index.js",
-	"bin": "./bin/gleech",
+  "bin": "./bin/gleech",
   "contributors": [
     {
       "name": "Nolan Caudill",
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "grunt": "^1.0.1",
+    "grunt-browserify": "^5.2.0",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-jshint": "^1.1.0"
   },
