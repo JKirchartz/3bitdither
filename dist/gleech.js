@@ -943,6 +943,84 @@ Jimp.prototype.fractalGhosts = function fractalGhosts(type, color, cb) {
 };
 
 
+/**
+ * Glitch - randomly choose glitch functions to perform on the incoming image
+ */
+Jimp.prototype.glitch = function (cb) {
+	// chose and run random functions
+	var hist = [];
+	for (var i = 0, l = randRange(5, 10); i < l; i++) {
+		switch (randFloor(13)) {
+			case 0:
+				this.focusImage();
+				hist.push('focusImage');
+				break;
+			case 1:
+				this.ditherBitmask();
+				hist.push('ditherBitmask');
+				break;
+			case 2:
+				if (Math.random() > 0.5) {
+					this.superSlice();
+				} else {
+					this.superSlice2();
+				}
+				hist.push('superSlice/2');
+				break;
+			case 3:
+				this.colorShift();
+				hist.push('colorShift');
+				break;
+			case 4:
+				this.ditherRandom3();
+				hist.push('ditherRandom3');
+				break;
+			case 5:
+				this.ditherBayer3();
+				hist.push('ditherBayer3');
+				break;
+			case 6:
+				this.ditherAtkinsons();
+				hist.push('ditherAtkinsons');
+				break;
+			case 7:
+				this.ditherFloydSteinberg();
+				hist.push('ditherFloydSteinberg');
+				break;
+			case 8:
+				this.ditherHalftone();
+				hist.push('ditherHalftone');
+				break;
+			case 9:
+				this.dither8Bit();
+				hist.push('dither8bit');
+				break;
+			case 10:
+				if (coinToss()) {
+					var picker = randFloor(3);
+					if (picker == 1) {
+						this.redShift();
+						hist.push('redShift');
+					} else if (picker == 2) {
+						this.greenShift();
+						hist.push('greenShift');
+					} else {
+						this.blueShift();
+						hist.push('blueShift');
+					}
+				}
+				break;
+			default:
+				this.invert();
+				hist.push('invert');
+				break;
+		}
+	}
+	console.log('glitch history: ', hist.join(', '));
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
+};
+
 
 /**
  * Green Shift
@@ -1053,6 +1131,63 @@ Jimp.prototype.pixelSort = function pixelSort(cb) {
 	this.bitmap.data = new Buffer(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
+};
+
+/**
+ * Preset - sequentially run ___ with random parameters
+ * number - which preset to run (1-4) (default to 5 random glitches)
+ */
+Jimp.prototype.preset = function (number, cb) {
+	var ops = [];
+	switch(number) {
+		case 1:
+			ops = ['ditherRandom3', 'shortdumbsort', 'slice', 'invert', 'shortsort', 'shortsort', 'ditherRandom3', 'DrumrollVerticalWave', 'ditherBayer3', 'dumbSortRows', 'slicesort', 'DrumrollVertical'];
+			break;
+		case 2:
+			ops = ['shortsort', 'slice2', 'fractalGhosts4', 'sort', 'fractalGhosts2', 'colorShift'];
+			break;
+		case 3:
+			ops = ['ditherRandom3', 'focusImage', 'scanlines'];
+			break;
+		case 4:
+			ops = ['ditherAtkinsons', 'focusImage', 'ditherRandom3', 'focusImage'];
+			break;
+		default:
+			ops = ['glitch', 'glitch', 'glitch', 'glitch', 'glitch'];
+			break;
+	}
+	for (var i in ops) {
+		this[ops[i]]();
+	}
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
+};
+
+
+
+/**
+ * randomGlitch - randomly choose glitch functions to perform on the incoming image
+ */
+Jimp.prototype.randomGlitch = function (imageData) {
+	var history = [];
+	// enumerate glitch functions
+	var glitches = [];
+	for (var prop in this) {
+		if (typeof this[prop] === 'function' &&
+				this[prop].name){
+			glitches.push(this[prop].name);
+		}
+	}
+	for (var i = 0, l = randRange(3, 6); i < l; i++) {
+		var fun = randFloor(glitches.length);
+		this[glitches[fun]](imageData);
+		history.push(glitches[fun]);
+	}
+	if (history.length === 0) {
+		return this.randomGlitch(imageData);
+	}
+	console.log('randomGlitch history:', history);
+	return imageData;
 };
 
 /**
@@ -1629,6 +1764,22 @@ Jimp.prototype.superSlice = function superSlice(iter, cb) {
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
+
+
+/**
+ * theworks - run every glitch function on the incoming image
+ */
+Jimp.prototype.theworks = function (cb) {
+	for (var prop in this) {
+		if (typeof this[prop] === 'function' &&
+				this[prop].name){
+			this[prop]();
+		}
+	}
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
+};
+
 
 
 if( typeof module !== 'undefined' && module.exports ) {

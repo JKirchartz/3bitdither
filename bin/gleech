@@ -12,15 +12,22 @@ var pkg = require('../package.json');
 
 cmdr
 .command('glitch <input> <output> [operation] [parameters...]')
-.description('Glitches an image with optional type and parameters')
+.description('Glitches an image with optional function name and parameters')
 .action(function(input, output, operation, parameters) {
+  // convert numeric parameters into numbers
+  for (var p in parameters) {
+		if ( !isNaN(parseFloat(parameters[p], 10)) ) {
+			parameters[p] = parseFloat(parameters[p], 10);
+		}
+		console.log(parameters[p]);
+	}
 	gleech.read(input, function(err, image) {
 		if (operation && parameters) {
 			image[operation].apply(this, parameters);
 		} else if (operation && !parameters) {
 			image[operation]();
 		} else {
-			console.log("please provide a function name");
+			image.glitch()
 		}
 		image.write(output);
 	});
@@ -37,7 +44,7 @@ cmdr.command('list')
 			output += gleech.prototype[prop].name + ' ';
 		}
 	}
-	output += ('\n\nJimp functions:\n\n');
+	output += ('\n\nJimp functions & Glitch presets:\n\n');
 	for (var prop2 in gleech.prototype) {
 		if (typeof gleech.prototype[prop2] === 'function' &&
 				! gleech.prototype[prop2].name){
