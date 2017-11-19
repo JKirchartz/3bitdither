@@ -321,3 +321,47 @@ gleech.read('./test.jpg', function (err, img) {
 	if (err) { throw new Error(err); }
 	img.dither8Bit().write('test_dither8Bit.jpg');
 });
+
+
+
+
+
+
+gleech.read('./test.jpg', function (err, img) {
+	if (err) { throw new Error(err); }
+	img.glitch().write('test_glitch.jpg');
+});
+
+
+gleech.read('./test.jpg', function (err, img) {
+	if (err) { throw new Error(err); }
+	img.preset(0).write('test_preset0.jpg');
+});
+gleech.read('./test.jpg', function (err, img) {
+	if (err) { throw new Error(err); }
+	img.preset(1).write('test_preset1.jpg');
+});
+gleech.read('./test.jpg', function (err, img) {
+	if (err) { throw new Error(err); }
+	img.preset(2).write('test_preset2.jpg');
+});
+gleech.read('./test.jpg', function (err, img) {
+	if (err) { throw new Error(err); }
+	img.preset(3).write('test_preset3.jpg');
+});
+gleech.read('./test.jpg', function (err, img) {
+	if (err) { throw new Error(err); }
+	img.preset(4).write('test_preset4.jpg');
+});
+
+
+gleech.read('./test.jpg', function (err, img) {
+	if (err) { throw new Error(err); }
+	img.randomGlitch().write('test_randomGlitch.jpg');
+});
+
+
+gleech.read('./test.jpg', function (err, img) {
+	if (err) { throw new Error(err); }
+	img.theworks().write('test_theworks.jpg');
+});

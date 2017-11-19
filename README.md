@@ -59,6 +59,8 @@ run `gleech list` to see all available function names.
 
 ## Release Notes
 
+v0.2.1 glitch function only calls existant functions
+
 v0.2.0 glitch functionality is available as a node package and a command-line interface (gleech)
 
 v0.1.0 has added glitch functions to jimp, and mostly successfully emulates Glitchy3bitDither in node.js.

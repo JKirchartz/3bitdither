@@ -9,7 +9,7 @@ Jimp.prototype.preset = function (number, cb) {
 			ops = ['ditherRandom3', 'shortdumbsort', 'slice', 'invert', 'shortsort', 'shortsort', 'ditherRandom3', 'DrumrollVerticalWave', 'ditherBayer3', 'dumbSortRows', 'slicesort', 'DrumrollVertical'];
 			break;
 		case 2:
-			ops = ['shortsort', 'slice2', 'fractalGhosts4', 'sort', 'fractalGhosts2', 'colorShift'];
+			ops = ['shortsort', 'slice', 'fractalGhosts', 'sort', 'fractalGhosts', 'colorShift'];
 			break;
 		case 3:
 			ops = ['ditherRandom3', 'focusImage', 'scanlines'];
@@ -22,6 +22,7 @@ Jimp.prototype.preset = function (number, cb) {
 			break;
 	}
 	for (var i in ops) {
+		console.log(ops[i]);
 		this[ops[i]]();
 	}
 	if (isNodePattern(cb)) return cb.call(this, null, this);

@@ -960,12 +960,8 @@ Jimp.prototype.glitch = function (cb) {
 				hist.push('ditherBitmask');
 				break;
 			case 2:
-				if (Math.random() > 0.5) {
 					this.superSlice();
-				} else {
-					this.superSlice2();
-				}
-				hist.push('superSlice/2');
+				hist.push('superSlice');
 				break;
 			case 3:
 				this.colorShift();
@@ -1011,7 +1007,7 @@ Jimp.prototype.glitch = function (cb) {
 				}
 				break;
 			default:
-				this.invert();
+				this.inverse();
 				hist.push('invert');
 				break;
 		}
@@ -1144,7 +1140,7 @@ Jimp.prototype.preset = function (number, cb) {
 			ops = ['ditherRandom3', 'shortdumbsort', 'slice', 'invert', 'shortsort', 'shortsort', 'ditherRandom3', 'DrumrollVerticalWave', 'ditherBayer3', 'dumbSortRows', 'slicesort', 'DrumrollVertical'];
 			break;
 		case 2:
-			ops = ['shortsort', 'slice2', 'fractalGhosts4', 'sort', 'fractalGhosts2', 'colorShift'];
+			ops = ['shortsort', 'slice', 'fractalGhosts', 'sort', 'fractalGhosts', 'colorShift'];
 			break;
 		case 3:
 			ops = ['ditherRandom3', 'focusImage', 'scanlines'];
@@ -1157,6 +1153,7 @@ Jimp.prototype.preset = function (number, cb) {
 			break;
 	}
 	for (var i in ops) {
+		console.log(ops[i]);
 		this[ops[i]]();
 	}
 	if (isNodePattern(cb)) return cb.call(this, null, this);
@@ -1168,7 +1165,7 @@ Jimp.prototype.preset = function (number, cb) {
 /**
  * randomGlitch - randomly choose glitch functions to perform on the incoming image
  */
-Jimp.prototype.randomGlitch = function (imageData) {
+Jimp.prototype.randomGlitch = function (cb) {
 	var history = [];
 	// enumerate glitch functions
 	var glitches = [];
@@ -1180,14 +1177,16 @@ Jimp.prototype.randomGlitch = function (imageData) {
 	}
 	for (var i = 0, l = randRange(3, 6); i < l; i++) {
 		var fun = randFloor(glitches.length);
-		this[glitches[fun]](imageData);
+		this[glitches[fun]]();
 		history.push(glitches[fun]);
 	}
 	if (history.length === 0) {
-		return this.randomGlitch(imageData);
+		return this.randomGlitch();
 	}
 	console.log('randomGlitch history:', history);
-	return imageData;
+
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
 };
 
 /**
@@ -1458,6 +1457,7 @@ Jimp.prototype.selectSlice = function selectSlice(selection, cb) {
  * @param {integer} end - pixel to end at
  */
 Jimp.prototype.shortdumbsort = function shortdumbsort(start, end, cb) {
+	console.log('shortdumbsort');
 	var width = this.bitmap.width,
 	height = this.bitmap.height,
 	data = new Uint32Array(this.bitmap.data.buffer);
@@ -1473,8 +1473,10 @@ Jimp.prototype.shortdumbsort = function shortdumbsort(start, end, cb) {
 		mm = [start, end];
 	}
 	var da = data.subarray(mm[0], mm[1]);
+	console.log('subarray length:', da.length, 'start', mm[0], 'end', mm[1]);
 	Array.prototype.sort.call(da);
 	data.set(da, mm[0]);
+	console.log('data length:', data.length);
 	this.bitmap.data = new Buffer(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
@@ -1537,7 +1539,8 @@ Jimp.prototype.slice = function slice(cutstart, cutend, cb) {
 	cutend = !nullOrUndefined(cutend) ? cutend : randFloor(width * height * 4);
 	cutstart = !nullOrUndefined(cutstart) ? cutstart : Math.floor(cutend / 1.7);
 	var cut = data.subarray(cutstart, cutend);
-	data.set(cut, randFloor((width * height * 4) - cut.length));
+	console.log('slice::\ncut: %s, start: %s, end: %s', cut.length, cutstart, cutend);
+	data.set(cut, randFloor((width * height * 4) - cut.length) || 0);
 	this.bitmap.data = new Buffer(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;

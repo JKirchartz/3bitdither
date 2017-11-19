@@ -1,7 +1,7 @@
 /**
  * randomGlitch - randomly choose glitch functions to perform on the incoming image
  */
-Jimp.prototype.randomGlitch = function (imageData) {
+Jimp.prototype.randomGlitch = function (cb) {
 	var history = [];
 	// enumerate glitch functions
 	var glitches = [];
@@ -13,12 +13,14 @@ Jimp.prototype.randomGlitch = function (imageData) {
 	}
 	for (var i = 0, l = randRange(3, 6); i < l; i++) {
 		var fun = randFloor(glitches.length);
-		this[glitches[fun]](imageData);
+		this[glitches[fun]]();
 		history.push(glitches[fun]);
 	}
 	if (history.length === 0) {
-		return this.randomGlitch(imageData);
+		return this.randomGlitch();
 	}
 	console.log('randomGlitch history:', history);
-	return imageData;
+
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
 };

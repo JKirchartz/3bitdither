@@ -4,6 +4,7 @@
  * @param {integer} end - pixel to end at
  */
 Jimp.prototype.shortdumbsort = function shortdumbsort(start, end, cb) {
+	console.log('shortdumbsort');
 	var width = this.bitmap.width,
 	height = this.bitmap.height,
 	data = new Uint32Array(this.bitmap.data.buffer);
@@ -19,8 +20,10 @@ Jimp.prototype.shortdumbsort = function shortdumbsort(start, end, cb) {
 		mm = [start, end];
 	}
 	var da = data.subarray(mm[0], mm[1]);
+	console.log('subarray length:', da.length, 'start', mm[0], 'end', mm[1]);
 	Array.prototype.sort.call(da);
 	data.set(da, mm[0]);
+	console.log('data length:', data.length);
 	this.bitmap.data = new Buffer(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
