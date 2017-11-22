@@ -56,6 +56,7 @@ run `gleech list` to see all available function names.
   - scan lines (1px black line the entire width every N lines)
   - move each "row" in opposite directions (1px at a time)
   - kaleidoscope
+8. Add blend modes: https://en.wikipedia.org/wiki/Blend_modes
 
 ## Release Notes
 
