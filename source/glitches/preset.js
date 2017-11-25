@@ -6,7 +6,7 @@ Jimp.prototype.preset = function (number, cb) {
 	var ops = [];
 	switch(number) {
 		case 1:
-			ops = ['ditherRandom3', 'shortdumbsort', 'slice', 'invert', 'shortsort', 'shortsort', 'ditherRandom3', 'DrumrollVerticalWave', 'ditherBayer3', 'dumbSortRows', 'slicesort', 'DrumrollVertical'];
+			ops = ['ditherRandom3', 'shortdumbsort', 'slice', 'invert', 'shortsort', 'shortsort', 'ditherRandom3', 'drumrollVerticalWave', 'ditherBayer3', 'dumbSortRows', 'slicesort', 'drumrollVertical'];
 			break;
 		case 2:
 			ops = ['shortsort', 'slice', 'fractalGhosts', 'sort', 'fractalGhosts', 'colorShift'];
@@ -18,7 +18,7 @@ Jimp.prototype.preset = function (number, cb) {
 			ops = ['ditherAtkinsons', 'focusImage', 'ditherRandom3', 'focusImage'];
 			break;
 		default:
-			ops = ['glitch', 'glitch', 'glitch', 'glitch', 'glitch'];
+			ops = ['glitch'];
 			break;
 	}
 	for (var i in ops) {

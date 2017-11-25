@@ -19,12 +19,16 @@ Jimp.prototype.shortdumbsort = function shortdumbsort(start, end, cb) {
 	} else {
 		mm = [start, end];
 	}
-	var da = data.subarray(mm[0], mm[1]);
-	console.log('subarray length:', da.length, 'start', mm[0], 'end', mm[1]);
-	Array.prototype.sort.call(da);
-	data.set(da, mm[0]);
-	console.log('data length:', data.length);
-	this.bitmap.data = new Buffer(data);
+	// try {
+		var da = data.subarray(mm[0], mm[1]);
+		console.log('subarray length:', da.length, 'start', mm[0], 'end', mm[1]);
+		Array.prototype.sort.call(da);
+		data.set(da, mm[0]);
+		console.log('data length:', data.length, 'offset', mm[0], 'size', mm[0] + da.length);
+		this.bitmap.data = new Buffer(data);
+	// } catch (err) {
+	// 	console.error(err);
+	// }
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };

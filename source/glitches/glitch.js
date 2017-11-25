@@ -15,7 +15,7 @@ Jimp.prototype.glitch = function (cb) {
 				hist.push('ditherBitmask');
 				break;
 			case 2:
-					this.superSlice();
+				this.superSlice();
 				hist.push('superSlice');
 				break;
 			case 3:

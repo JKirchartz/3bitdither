@@ -960,7 +960,7 @@ Jimp.prototype.glitch = function (cb) {
 				hist.push('ditherBitmask');
 				break;
 			case 2:
-					this.superSlice();
+				this.superSlice();
 				hist.push('superSlice');
 				break;
 			case 3:
@@ -1007,7 +1007,7 @@ Jimp.prototype.glitch = function (cb) {
 				}
 				break;
 			default:
-				this.inverse();
+				this.invert();
 				hist.push('invert');
 				break;
 		}
@@ -1137,7 +1137,7 @@ Jimp.prototype.preset = function (number, cb) {
 	var ops = [];
 	switch(number) {
 		case 1:
-			ops = ['ditherRandom3', 'shortdumbsort', 'slice', 'invert', 'shortsort', 'shortsort', 'ditherRandom3', 'DrumrollVerticalWave', 'ditherBayer3', 'dumbSortRows', 'slicesort', 'DrumrollVertical'];
+			ops = ['ditherRandom3', 'shortdumbsort', 'slice', 'invert', 'shortsort', 'shortsort', 'ditherRandom3', 'drumrollVerticalWave', 'ditherBayer3', 'dumbSortRows', 'slicesort', 'drumrollVertical'];
 			break;
 		case 2:
 			ops = ['shortsort', 'slice', 'fractalGhosts', 'sort', 'fractalGhosts', 'colorShift'];
@@ -1149,11 +1149,10 @@ Jimp.prototype.preset = function (number, cb) {
 			ops = ['ditherAtkinsons', 'focusImage', 'ditherRandom3', 'focusImage'];
 			break;
 		default:
-			ops = ['glitch', 'glitch', 'glitch', 'glitch', 'glitch'];
+			ops = ['glitch'];
 			break;
 	}
 	for (var i in ops) {
-		console.log(ops[i]);
 		this[ops[i]]();
 	}
 	if (isNodePattern(cb)) return cb.call(this, null, this);
@@ -1165,28 +1164,26 @@ Jimp.prototype.preset = function (number, cb) {
 /**
  * randomGlitch - randomly choose glitch functions to perform on the incoming image
  */
-Jimp.prototype.randomGlitch = function (cb) {
+Jimp.prototype.randomGlitch = function (imageData) {
 	var history = [];
 	// enumerate glitch functions
 	var glitches = [];
-	for (var prop in this) {
-		if (typeof this[prop] === 'function' &&
-				this[prop].name){
+	for (var prop in Jimp.prototype) {
+		if (typeof Jimp.prototype[prop] === 'function' &&
+				Jimp.prototype[prop].name){
 			glitches.push(this[prop].name);
 		}
 	}
 	for (var i = 0, l = randRange(3, 6); i < l; i++) {
 		var fun = randFloor(glitches.length);
-		this[glitches[fun]]();
+		this[glitches[fun]](imageData);
 		history.push(glitches[fun]);
 	}
 	if (history.length === 0) {
-		return this.randomGlitch();
+		return this.randomGlitch(imageData);
 	}
 	console.log('randomGlitch history:', history);
-
-	if (isNodePattern(cb)) return cb.call(this, null, this);
-	else return this;
+	return imageData;
 };
 
 /**
@@ -1457,7 +1454,6 @@ Jimp.prototype.selectSlice = function selectSlice(selection, cb) {
  * @param {integer} end - pixel to end at
  */
 Jimp.prototype.shortdumbsort = function shortdumbsort(start, end, cb) {
-	console.log('shortdumbsort');
 	var width = this.bitmap.width,
 	height = this.bitmap.height,
 	data = new Uint32Array(this.bitmap.data.buffer);
@@ -1472,12 +1468,14 @@ Jimp.prototype.shortdumbsort = function shortdumbsort(start, end, cb) {
 	} else {
 		mm = [start, end];
 	}
-	var da = data.subarray(mm[0], mm[1]);
-	console.log('subarray length:', da.length, 'start', mm[0], 'end', mm[1]);
-	Array.prototype.sort.call(da);
-	data.set(da, mm[0]);
-	console.log('data length:', data.length);
-	this.bitmap.data = new Buffer(data);
+	try {
+		var da = data.subarray(mm[0], mm[1]);
+		Array.prototype.sort.call(da);
+		data.set(da, mm[0]);
+		this.bitmap.data = new Buffer(data);
+	} catch (err) {
+		console.error(err);
+	}
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1539,8 +1537,7 @@ Jimp.prototype.slice = function slice(cutstart, cutend, cb) {
 	cutend = !nullOrUndefined(cutend) ? cutend : randFloor(width * height * 4);
 	cutstart = !nullOrUndefined(cutstart) ? cutstart : Math.floor(cutend / 1.7);
 	var cut = data.subarray(cutstart, cutend);
-	console.log('slice::\ncut: %s, start: %s, end: %s', cut.length, cutstart, cutend);
-	data.set(cut, randFloor((width * height * 4) - cut.length) || 0);
+	data.set(cut, randFloor((width * height * 4) - cut.length));
 	this.bitmap.data = new Buffer(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
