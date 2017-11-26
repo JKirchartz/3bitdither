@@ -6,7 +6,7 @@ Jimp.prototype.preset = function (number, cb) {
 	var ops = [];
 	switch(number) {
 		case 1:
-			ops = ['ditherRandom3', 'shortdumbsort', 'slice', 'invert', 'shortsort', 'shortsort', 'ditherRandom3', 'drumrollVerticalWave', 'ditherBayer3', 'dumbSortRows', 'slicesort', 'drumrollVertical'];
+			ops = ['ditherRandom3', 'shortsort', 'slice', 'invert', 'shortsort', 'shortsort', 'ditherRandom3', 'drumrollVerticalWave', 'ditherBayer3', 'dumbSortRows', 'slicesort', 'drumrollVertical'];
 			break;
 		case 2:
 			ops = ['shortsort', 'slice', 'fractalGhosts', 'sort', 'fractalGhosts', 'colorShift'];

@@ -1007,7 +1007,7 @@ Jimp.prototype.glitch = function (cb) {
 				}
 				break;
 			default:
-				this.invert();
+				this.inverse();
 				hist.push('invert');
 				break;
 		}
@@ -1137,7 +1137,7 @@ Jimp.prototype.preset = function (number, cb) {
 	var ops = [];
 	switch(number) {
 		case 1:
-			ops = ['ditherRandom3', 'shortdumbsort', 'slice', 'invert', 'shortsort', 'shortsort', 'ditherRandom3', 'drumrollVerticalWave', 'ditherBayer3', 'dumbSortRows', 'slicesort', 'drumrollVertical'];
+			ops = ['ditherRandom3', 'shortsort', 'slice', 'invert', 'shortsort', 'shortsort', 'ditherRandom3', 'drumrollVerticalWave', 'ditherBayer3', 'dumbSortRows', 'slicesort', 'drumrollVertical'];
 			break;
 		case 2:
 			ops = ['shortsort', 'slice', 'fractalGhosts', 'sort', 'fractalGhosts', 'colorShift'];
@@ -1153,6 +1153,7 @@ Jimp.prototype.preset = function (number, cb) {
 			break;
 	}
 	for (var i in ops) {
+		console.log(ops[i]);
 		this[ops[i]]();
 	}
 	if (isNodePattern(cb)) return cb.call(this, null, this);
@@ -1164,7 +1165,7 @@ Jimp.prototype.preset = function (number, cb) {
 /**
  * randomGlitch - randomly choose glitch functions to perform on the incoming image
  */
-Jimp.prototype.randomGlitch = function (imageData) {
+Jimp.prototype.randomGlitch = function (cb) {
 	var history = [];
 	// enumerate glitch functions
 	var glitches = [];
@@ -1174,16 +1175,20 @@ Jimp.prototype.randomGlitch = function (imageData) {
 			glitches.push(this[prop].name);
 		}
 	}
+	console.log(glitches);
 	for (var i = 0, l = randRange(3, 6); i < l; i++) {
 		var fun = randFloor(glitches.length);
-		this[glitches[fun]](imageData);
+		console.log(fun);
+		this[glitches[fun]]();
 		history.push(glitches[fun]);
 	}
 	if (history.length === 0) {
-		return this.randomGlitch(imageData);
+		return this.randomGlitch();
 	}
 	console.log('randomGlitch history:', history);
-	return imageData;
+
+	if (isNodePattern(cb)) return cb.call(this, null, this);
+	else return this;
 };
 
 /**
@@ -1454,6 +1459,7 @@ Jimp.prototype.selectSlice = function selectSlice(selection, cb) {
  * @param {integer} end - pixel to end at
  */
 Jimp.prototype.shortdumbsort = function shortdumbsort(start, end, cb) {
+	console.log('shortdumbsort');
 	var width = this.bitmap.width,
 	height = this.bitmap.height,
 	data = new Uint32Array(this.bitmap.data.buffer);
@@ -1469,8 +1475,10 @@ Jimp.prototype.shortdumbsort = function shortdumbsort(start, end, cb) {
 		mm = [start, end];
 	}
 	try {
-		var da = data.subarray(mm[0], mm[1]);
+		var da = data.subarray(mm[0], mm[1] % data.length);
+		console.log('subarray length:', da.length, 'start', mm[0], 'end', mm[1]);
 		Array.prototype.sort.call(da);
+		console.log('data length:', data.length, 'offset', mm[0], 'size', mm[0] + da.length);
 		data.set(da, mm[0]);
 		this.bitmap.data = new Buffer(data);
 	} catch (err) {
@@ -1537,7 +1545,8 @@ Jimp.prototype.slice = function slice(cutstart, cutend, cb) {
 	cutend = !nullOrUndefined(cutend) ? cutend : randFloor(width * height * 4);
 	cutstart = !nullOrUndefined(cutstart) ? cutstart : Math.floor(cutend / 1.7);
 	var cut = data.subarray(cutstart, cutend);
-	data.set(cut, randFloor((width * height * 4) - cut.length));
+	console.log('slice::\ncut: %s, start: %s, end: %s', cut.length, cutstart, cutend);
+	data.set(cut, randFloor((width * height * 4) - cut.length) || 0);
 	this.bitmap.data = new Buffer(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;

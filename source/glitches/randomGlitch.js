@@ -11,8 +11,10 @@ Jimp.prototype.randomGlitch = function (cb) {
 			glitches.push(this[prop].name);
 		}
 	}
+	console.log(glitches);
 	for (var i = 0, l = randRange(3, 6); i < l; i++) {
 		var fun = randFloor(glitches.length);
+		console.log(fun);
 		this[glitches[fun]]();
 		history.push(glitches[fun]);
 	}
