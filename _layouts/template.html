@@ -45,7 +45,7 @@ function drawDitherResult(canvas, ditherer, text, append) {
   console.log(ditherer);
   ctx.putImageData(gleech[ditherer](imageData), 0, 0);
   var img = new Image();
-	img.crossOrigin = '';
+	img.setAttribute('crossOrigin', 'anonymous');
   img.src = canvas.toDataURL('image/png');
   img.alt = ditherer;
   if (text) {

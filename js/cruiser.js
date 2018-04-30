@@ -55,9 +55,9 @@ function handleFileSelect(e) {
   // Closure to capture the file information.
   reader.onload = function(e) {
     var img = document.createElement("img");
-		img.crossOrigin = '';
+		img.setAttribute('crossOrigin', 'anonymous');
     img.onload = function() {
-			img.crossOrigin = '';
+			img.setAttribute('crossOrigin', 'anonymous');
       generate(img);
     };
     img.src = reader.result;
