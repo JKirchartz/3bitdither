@@ -56,8 +56,10 @@ function handleFileSelect(e) {
   reader.onload = function(e) {
     var img = document.createElement("img");
 		img.crossOrigin = "Anonymous";
+		img.setAttribute('crossOrigin', "Anonymous");
     img.onload = function() {
 			img.crossOrigin = "Anonymous";
+			img.setAttribute('crossOrigin', "Anonymous");
       generate(img);
     };
     img.src = e.target.result;
