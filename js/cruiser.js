@@ -55,14 +55,14 @@ function handleFileSelect(e) {
   // Closure to capture the file information.
   reader.onload = function(e) {
     var img = document.createElement("img");
-		img.crossOrigin = "Anonymous";
-		img.setAttribute('crossOrigin', "Anonymous");
+		img.crossOrigin = "";
+		img.setAttribute('crossOrigin', "");
     img.onload = function() {
-			img.crossOrigin = "Anonymous";
-			img.setAttribute('crossOrigin', "Anonymous");
+			img.crossOrigin = "";
+			img.setAttribute('crossOrigin', "");
       generate(img);
     };
-    img.src = e.target.result;
+    img.src = reader.result;
   };
   reader.readAsDataURL(file);
   document.getElementById("output").innerHTML = "";
