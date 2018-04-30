@@ -43,11 +43,9 @@ function handleFileSelect(e) {
   // Closure to capture the file information.
   reader.onload = function(e) {
     img = document.createElement("img");
-		img.crossOrigin = "";
-		img.setAttribute('crossOrigin', "");
+		img.crossOrigin = '';
     img.onload = function() {
-			img.crossOrigin = "";
-			img.setAttribute('crossOrigin', "");
+			img.crossOrigin = '';
       orig_img = img;
       generate(img,"original");
     };
@@ -56,7 +54,7 @@ function handleFileSelect(e) {
 	if(file) {
 		reader.readAsDataURL(file);
 	}
-  document.getElementById("output").innerHTML = "";
+  document.getElementById("output").innerHTML = '';
 }
 
 function generate(img,chosen){

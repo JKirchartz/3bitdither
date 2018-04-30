@@ -20,13 +20,11 @@ layout: template
         // Closure to capture the file information.
         reader.onload = function(e) {
             var img = document.createElement("img");
-						img.crossOrigin = "";
-						img.setAttribute('crossOrigin', "");
+						img.crossOrigin = '';
             img.onload = function() {
                 var width = img.width;
                 var height = img.height;
-								img.crossOrigin = "";
-								img.setAttribute('crossOrigin', "");
+								img.crossOrigin = '';
                 var canvas = document.createElement('canvas');
                 canvas.width = width;
                 canvas.height = height;
@@ -44,7 +42,7 @@ layout: template
             img.src = e.target.result;
         };
         reader.readAsDataURL(file);
-        document.getElementById("output").innerHTML = "";
+        document.getElementById("output").innerHTML = '';
     }
     document.getElementById('uploader').addEventListener('change', handleFileSelect, false);
 </script>

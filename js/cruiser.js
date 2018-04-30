@@ -21,7 +21,7 @@ var seqCounter = 0;
 
 function generate(img){
   /* cleanup */
-  document.getElementById("output").innerHTML = "";
+  document.getElementById("output").innerHTML = '';
   /* setup */
   var orig = img;
   var width = img.width;
@@ -55,17 +55,15 @@ function handleFileSelect(e) {
   // Closure to capture the file information.
   reader.onload = function(e) {
     var img = document.createElement("img");
-		img.crossOrigin = "";
-		img.setAttribute('crossOrigin', "");
+		img.crossOrigin = '';
     img.onload = function() {
-			img.crossOrigin = "";
-			img.setAttribute('crossOrigin', "");
+			img.crossOrigin = '';
       generate(img);
     };
     img.src = reader.result;
   };
   reader.readAsDataURL(file);
-  document.getElementById("output").innerHTML = "";
+  document.getElementById("output").innerHTML = '';
 }
 
 document.getElementById('output').onclick = function(e){
