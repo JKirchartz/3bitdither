@@ -60,7 +60,7 @@ function handleFileSelect(e) {
 			img.setAttribute('crossOrigin', 'anonymous');
       generate(img);
     };
-    img.src = reader.result;
+    img.src = "" + reader.result;
   };
   reader.readAsDataURL(file);
   document.getElementById("output").innerHTML = '';

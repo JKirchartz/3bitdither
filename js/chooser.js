@@ -49,7 +49,7 @@ function handleFileSelect(e) {
       orig_img = img;
       generate(img,"original");
     };
-    img.src = reader.result;
+    img.src = "" + reader.result;
   };
 	if(file) {
 		reader.readAsDataURL(file);
