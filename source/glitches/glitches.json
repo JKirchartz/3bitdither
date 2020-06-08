@@ -1,0 +1,1023 @@
+[
+  {
+    "id": "Jimp#blueShift",
+    "longname": "Jimp#blueShift",
+    "name": "blueShift",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Blue Shift",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "factor by which to reduce red and green channels and boost blue channel",
+        "name": "factor"
+      }
+    ],
+    "meta": {
+      "lineno": 5,
+      "filename": "blueShift.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 0
+  },
+  {
+    "id": "Jimp#colorShift",
+    "longname": "Jimp#colorShift",
+    "name": "colorShift",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Color Shift",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "boolean"
+          ]
+        },
+        "description": "direction to shift colors, true for RGB->GBR, false for RGB->BRG.",
+        "name": "dir"
+      }
+    ],
+    "meta": {
+      "lineno": 7,
+      "filename": "colorShift.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 1
+  },
+  {
+    "id": "Jimp#colorShift2",
+    "longname": "Jimp#colorShift2",
+    "name": "colorShift2",
+    "kind": "function",
+    "scope": "instance",
+    "description": "colorShift2",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "boolean"
+          ]
+        },
+        "description": "direction to shift pixels (left or right)",
+        "name": "dir"
+      }
+    ],
+    "meta": {
+      "lineno": 5,
+      "filename": "colorShift2.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 2
+  },
+  {
+    "id": "Jimp#dither8Bit",
+    "longname": "Jimp#dither8Bit",
+    "name": "dither8Bit",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Dither: 8 bits",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "a number greater than 1 representing pixel size.",
+        "name": "size"
+      }
+    ],
+    "meta": {
+      "lineno": 5,
+      "filename": "dither8bit.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 3
+  },
+  {
+    "id": "Jimp#ditherAtkinsons",
+    "longname": "Jimp#ditherAtkinsons",
+    "name": "ditherAtkinsons",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Dither: Atkinsons",
+    "memberof": "Jimp",
+    "meta": {
+      "lineno": 4,
+      "filename": "ditherAtkinson.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 4
+  },
+  {
+    "id": "Jimp#ditherBayer",
+    "longname": "Jimp#ditherBayer",
+    "name": "ditherBayer",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Dither: Bayer",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "which matrix to use for the threshold map - 0: 3x3,  1: 4x4, 2: 8x8",
+        "name": "map"
+      }
+    ],
+    "meta": {
+      "lineno": 5,
+      "filename": "ditherBayer.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 5
+  },
+  {
+    "id": "Jimp#ditherBayer3",
+    "longname": "Jimp#ditherBayer3",
+    "name": "ditherBayer3",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Dither: Bayer 3 - full-color bayer algo",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "which matrix to use for the threshold map - 0: 3x3,  1: 4x4, 2: 8x8",
+        "name": "map"
+      }
+    ],
+    "meta": {
+      "lineno": 5,
+      "filename": "ditherBayerRGB.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 6
+  },
+  {
+    "id": "Jimp#ditherBitmask",
+    "longname": "Jimp#ditherBitmask",
+    "name": "ditherBitmask",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Dither: Bitmask",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "number with which to mask each color channel 1-254",
+        "name": "mask"
+      }
+    ],
+    "meta": {
+      "lineno": 5,
+      "filename": "ditherBitmask.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 7
+  },
+  {
+    "id": "Jimp#ditherFloydSteinberg",
+    "longname": "Jimp#ditherFloydSteinberg",
+    "name": "ditherFloydSteinberg",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Dither: Floyd-Steinberg",
+    "memberof": "Jimp",
+    "meta": {
+      "lineno": 4,
+      "filename": "ditherFloydSteinberg.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 8
+  },
+  {
+    "id": "Jimp#ditherHalftone",
+    "longname": "Jimp#ditherHalftone",
+    "name": "ditherHalftone",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Dither: Halftone",
+    "memberof": "Jimp",
+    "meta": {
+      "lineno": 4,
+      "filename": "ditherHalftone.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 9
+  },
+  {
+    "id": "Jimp#ditherRandom",
+    "longname": "Jimp#ditherRandom",
+    "name": "ditherRandom",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Dither: Random - dither according to noise",
+    "memberof": "Jimp",
+    "meta": {
+      "lineno": 4,
+      "filename": "ditherRandom.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 10
+  },
+  {
+    "id": "Jimp#ditherRandom3",
+    "longname": "Jimp#ditherRandom3",
+    "name": "ditherRandom3",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Dither: Random 3 - full color dithering via noise",
+    "memberof": "Jimp",
+    "meta": {
+      "lineno": 4,
+      "filename": "ditherRandomRGB.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 11
+  },
+  {
+    "id": "Jimp#drumrollHorizontal",
+    "longname": "Jimp#drumrollHorizontal",
+    "name": "drumrollHorizontal",
+    "kind": "function",
+    "scope": "instance",
+    "description": "drumrollHorizontal",
+    "memberof": "Jimp",
+    "meta": {
+      "lineno": 4,
+      "filename": "drumrollHorizontal.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 12
+  },
+  {
+    "id": "Jimp#drumrollHorizontalWave",
+    "longname": "Jimp#drumrollHorizontalWave",
+    "name": "drumrollHorizontalWave",
+    "kind": "function",
+    "scope": "instance",
+    "description": "drumrollHorizontalWave",
+    "memberof": "Jimp",
+    "meta": {
+      "lineno": 5,
+      "filename": "drumrollHorizontalWave.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 13
+  },
+  {
+    "id": "Jimp#drumrollVertical",
+    "longname": "Jimp#drumrollVertical",
+    "name": "drumrollVertical",
+    "kind": "function",
+    "scope": "instance",
+    "description": "drumrollVertical",
+    "memberof": "Jimp",
+    "meta": {
+      "lineno": 4,
+      "filename": "drumrollVertical.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 14
+  },
+  {
+    "id": "Jimp#drumrollVerticalWave",
+    "longname": "Jimp#drumrollVerticalWave",
+    "name": "drumrollVerticalWave",
+    "kind": "function",
+    "scope": "instance",
+    "description": "drumrollVerticalWave",
+    "memberof": "Jimp",
+    "meta": {
+      "lineno": 4,
+      "filename": "drumrollVerticalWave.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 15
+  },
+  {
+    "id": "Jimp#dumbSortRows",
+    "longname": "Jimp#dumbSortRows",
+    "name": "dumbSortRows",
+    "kind": "function",
+    "scope": "instance",
+    "description": "dumbSortRows",
+    "memberof": "Jimp",
+    "meta": {
+      "lineno": 4,
+      "filename": "dumbSortRows.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 16
+  },
+  {
+    "id": "Jimp#focusImage",
+    "longname": "Jimp#focusImage",
+    "name": "focusImage",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Focus Image",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "size of pixels to use for pixelization",
+        "name": "pixelation"
+      }
+    ],
+    "meta": {
+      "lineno": 5,
+      "filename": "focusImage.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 17
+  },
+  {
+    "id": "Jimp#fractal",
+    "longname": "Jimp#fractal",
+    "name": "fractal",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Fractal",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "A number from (currently 0 or 1) determining which algorithm to use",
+        "name": "type"
+      }
+    ],
+    "meta": {
+      "lineno": 5,
+      "filename": "fractal.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 18
+  },
+  {
+    "id": "Jimp#fractalGhosts",
+    "longname": "Jimp#fractalGhosts",
+    "name": "fractalGhosts",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Fractal Ghosts",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "A number from 0-3 determining which algorithm to use",
+        "name": "type"
+      },
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "The color channel to use to create the ghosts",
+        "name": "color"
+      }
+    ],
+    "meta": {
+      "lineno": 6,
+      "filename": "fractalGhosts.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 19
+  },
+  {
+    "id": "Jimp#greenShift",
+    "longname": "Jimp#greenShift",
+    "name": "greenShift",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Green Shift",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "factor by which to reduce red and blue channels and boost green channel",
+        "name": "factor"
+      }
+    ],
+    "meta": {
+      "lineno": 6,
+      "filename": "greenShift.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 20
+  },
+  {
+    "id": "Jimp#inverse",
+    "longname": "Jimp#inverse",
+    "name": "inverse",
+    "kind": "function",
+    "scope": "instance",
+    "description": "inverse",
+    "memberof": "Jimp",
+    "meta": {
+      "lineno": 4,
+      "filename": "inverse.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 21
+  },
+  {
+    "id": "Jimp#pixelFunk",
+    "longname": "Jimp#pixelFunk",
+    "name": "pixelFunk",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Pixel Funk",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "size of pixels to use for pixelization",
+        "name": "pixelation"
+      }
+    ],
+    "meta": {
+      "lineno": 5,
+      "filename": "pixelFunk.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 22
+  },
+  {
+    "id": "Jimp#pixelSort",
+    "longname": "Jimp#pixelSort",
+    "name": "pixelSort",
+    "kind": "function",
+    "scope": "instance",
+    "description": "pixelSort",
+    "memberof": "Jimp",
+    "meta": {
+      "lineno": 4,
+      "filename": "pixelSort.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 23
+  },
+  {
+    "id": "Jimp#randomSortRows",
+    "longname": "Jimp#randomSortRows",
+    "name": "randomSortRows",
+    "kind": "function",
+    "scope": "instance",
+    "description": "randomSortRows",
+    "memberof": "Jimp",
+    "meta": {
+      "lineno": 4,
+      "filename": "randomSortRows.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 24
+  },
+  {
+    "id": "Jimp#redShift",
+    "longname": "Jimp#redShift",
+    "name": "redShift",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Red Shift",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "factor by which to reduce green and blue channels and boost red channel",
+        "name": "factor"
+      }
+    ],
+    "meta": {
+      "lineno": 5,
+      "filename": "redShift.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 25
+  },
+  {
+    "id": "Jimp#rgbShift",
+    "longname": "Jimp#rgbShift",
+    "name": "rgbShift",
+    "kind": "function",
+    "scope": "instance",
+    "description": "RGB Shift",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "string"
+          ]
+        },
+        "description": "channel to shift color value from, 'r', 'g', or 'b'",
+        "name": "from"
+      },
+      {
+        "type": {
+          "names": [
+            "string"
+          ]
+        },
+        "description": "channel to shift color value to, 'r', 'g', or 'b'",
+        "name": "to"
+      },
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "factor by which to reduce other channels and boost the channel set by to",
+        "name": "factor"
+      }
+    ],
+    "meta": {
+      "lineno": 7,
+      "filename": "rgbShift.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 26
+  },
+  {
+    "id": "Jimp#rgb_glitch",
+    "longname": "Jimp#rgb_glitch",
+    "name": "rgb_glitch",
+    "kind": "function",
+    "scope": "instance",
+    "description": "rgb_glitch",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "pixels to offset",
+        "name": "offset"
+      },
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "number representing R (0), G (1), or B (2)",
+        "name": "rgb"
+      },
+      {
+        "type": {
+          "names": [
+            "boolean"
+          ]
+        },
+        "description": "shift pixels left or right, truthy for left, falsey for right",
+        "name": "direction"
+      }
+    ],
+    "meta": {
+      "lineno": 7,
+      "filename": "rgb_glitch.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 27
+  },
+  {
+    "id": "Jimp#scanlines",
+    "longname": "Jimp#scanlines",
+    "name": "scanlines",
+    "kind": "function",
+    "scope": "instance",
+    "description": "scanlines",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "0 for xor, 1 for or, or 2 for invert",
+        "name": "type"
+      },
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "size between scanlines, numbers between 3 and 15 look nice",
+        "name": "size"
+      },
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "0, 1, 2, or 3, to determine which value to use with Or or Xor",
+        "name": "option"
+      }
+    ],
+    "meta": {
+      "lineno": 7,
+      "filename": "scanlines.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 28
+  },
+  {
+    "id": "Jimp#selectSlice",
+    "longname": "Jimp#selectSlice",
+    "name": "selectSlice",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Select Slice",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "Algorithm to use to make an automatic slice (currently 0 or 1)",
+        "name": "selection"
+      }
+    ],
+    "meta": {
+      "lineno": 5,
+      "filename": "selectSlice.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 29
+  },
+  {
+    "id": "Jimp#shortsort",
+    "longname": "Jimp#shortsort",
+    "name": "shortsort",
+    "kind": "function",
+    "scope": "instance",
+    "description": "shortsort",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "integer"
+          ]
+        },
+        "description": "pixel to start at",
+        "name": "start"
+      },
+      {
+        "type": {
+          "names": [
+            "integer"
+          ]
+        },
+        "description": "pixel to end at",
+        "name": "end"
+      }
+    ],
+    "meta": {
+      "lineno": 6,
+      "filename": "shortSort.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 30
+  },
+  {
+    "id": "Jimp#shortdumbsort",
+    "longname": "Jimp#shortdumbsort",
+    "name": "shortdumbsort",
+    "kind": "function",
+    "scope": "instance",
+    "description": "shortdumbsort",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "integer"
+          ]
+        },
+        "description": "pixel to start at",
+        "name": "start"
+      },
+      {
+        "type": {
+          "names": [
+            "integer"
+          ]
+        },
+        "description": "pixel to end at",
+        "name": "end"
+      }
+    ],
+    "meta": {
+      "lineno": 6,
+      "filename": "shortdumbsort.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 31
+  },
+  {
+    "id": "Jimp#slice",
+    "longname": "Jimp#slice",
+    "name": "slice",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Slice",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "datapoint to begin cut",
+        "name": "cutstart"
+      },
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "datapoint to finalize cut",
+        "name": "cutend"
+      }
+    ],
+    "meta": {
+      "lineno": 6,
+      "filename": "slice.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 32
+  },
+  {
+    "id": "Jimp#slicesort",
+    "longname": "Jimp#slicesort",
+    "name": "slicesort",
+    "kind": "function",
+    "scope": "instance",
+    "description": "slicesort",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "boolean"
+          ]
+        },
+        "description": "direction to sort, T/F for Left or Right",
+        "name": "direction"
+      },
+      {
+        "type": {
+          "names": [
+            "integer"
+          ]
+        },
+        "description": "pixel to start at",
+        "name": "start"
+      },
+      {
+        "type": {
+          "names": [
+            "integer"
+          ]
+        },
+        "description": "pixel to end at",
+        "name": "end"
+      }
+    ],
+    "meta": {
+      "lineno": 7,
+      "filename": "slicesort.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 33
+  },
+  {
+    "id": "Jimp#sort",
+    "longname": "Jimp#sort",
+    "name": "sort",
+    "kind": "function",
+    "scope": "instance",
+    "description": "sort",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "boolean"
+          ]
+        },
+        "description": "T/F for Left or Right",
+        "name": "direction"
+      }
+    ],
+    "meta": {
+      "lineno": 5,
+      "filename": "sort.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 34
+  },
+  {
+    "id": "Jimp#sortRows",
+    "longname": "Jimp#sortRows",
+    "name": "sortRows",
+    "kind": "function",
+    "scope": "instance",
+    "description": "sortRows",
+    "memberof": "Jimp",
+    "meta": {
+      "lineno": 4,
+      "filename": "sortRows.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 35
+  },
+  {
+    "id": "Jimp#sortStripe",
+    "longname": "Jimp#sortStripe",
+    "name": "sortStripe",
+    "kind": "function",
+    "scope": "instance",
+    "description": "sortStripe",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "boolean"
+          ]
+        },
+        "description": "pixel to start at",
+        "name": "direction"
+      },
+      {
+        "type": {
+          "names": [
+            "integer"
+          ]
+        },
+        "description": "pixel to start at",
+        "name": "start"
+      },
+      {
+        "type": {
+          "names": [
+            "integer"
+          ]
+        },
+        "description": "pixel to end at",
+        "name": "end"
+      }
+    ],
+    "meta": {
+      "lineno": 7,
+      "filename": "sortStripe.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 36
+  },
+  {
+    "id": "Jimp#superPixelFunk",
+    "longname": "Jimp#superPixelFunk",
+    "name": "superPixelFunk",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Super Pixel Funk",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "size of pixels to use for pixelization",
+        "name": "pixelation"
+      }
+    ],
+    "meta": {
+      "lineno": 5,
+      "filename": "superPixelFunk.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 37
+  },
+  {
+    "id": "Jimp#superShift",
+    "longname": "Jimp#superShift",
+    "name": "superShift",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Super Shift",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "number of times to shift color values",
+        "name": "iter"
+      },
+      {
+        "type": {
+          "names": [
+            "boolean"
+          ]
+        },
+        "description": "direction to shift colors, true for RGB->GBR, false for RGB->BRG.",
+        "name": "dir"
+      }
+    ],
+    "meta": {
+      "lineno": 6,
+      "filename": "superShift.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 38
+  },
+  {
+    "id": "Jimp#superSlice",
+    "longname": "Jimp#superSlice",
+    "name": "superSlice",
+    "kind": "function",
+    "scope": "instance",
+    "description": "Super Slice",
+    "memberof": "Jimp",
+    "params": [
+      {
+        "type": {
+          "names": [
+            "number"
+          ]
+        },
+        "description": "Number of times to perform an automatic slice",
+        "name": "iter"
+      }
+    ],
+    "meta": {
+      "lineno": 5,
+      "filename": "superSlice.js",
+      "path": "/Users/jkirchartz/projects/Glitchy3bitdither/source/glitches"
+    },
+    "order": 39
+  }
+]
