@@ -31,7 +31,7 @@ Jimp.prototype.slicesort = function slicesort(dir, start, end, cb) {
 	}
 	data.set(data.buffer, coinToss() ? offset : mm[0]);
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };

@@ -27,7 +27,7 @@ Jimp.prototype.superShift = function superShift(iter, dir, cb) {
 				data[j + 2] = dir ? r : g;
 		}
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };

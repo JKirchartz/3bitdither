@@ -19,7 +19,7 @@ Jimp.prototype.blueShift = function blueShift(factor, cb) {
 		data[i + 1] -= factor;
 		data[i + 2] = (shift) > 255 ? 255 : shift;
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };

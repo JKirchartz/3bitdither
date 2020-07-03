@@ -14,7 +14,7 @@ Jimp.prototype.sort = function sort(dir, cb) {
 		Array.prototype.sort.call(data, rightSort);
 	}
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };

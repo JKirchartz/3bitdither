@@ -26,7 +26,7 @@ Jimp.prototype.shortsort = function shortsort(dir, start, end, cb) {
 		Array.prototype.sort.call(cut, rightSort);
 	}
 
-	this.bitmap.data = new Buffer(data.buffer);
+	this.bitmap.data = Buffer.from(data.buffer);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };

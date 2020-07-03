@@ -27,7 +27,7 @@ Jimp.prototype.sortStripe = function sortStripe(dir, start, end, cb) {
 		da.copyWithin(data, i + mm[0]);
 	}
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };

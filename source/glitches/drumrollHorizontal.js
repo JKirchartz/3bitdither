@@ -23,7 +23,7 @@ Jimp.prototype.drumrollHorizontal = function drumrollHorizontal(cb) {
 		}
 	}
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };

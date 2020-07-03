@@ -155,7 +155,7 @@ Jimp.prototype.blueShift = function blueShift(factor, cb) {
 		data[i + 1] -= factor;
 		data[i + 2] = (shift) > 255 ? 255 : shift;
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -183,7 +183,7 @@ Jimp.prototype.colorShift = function colorShift(dir, cb) {
 			data[i + 1] = dir ? b : r;
 			data[i + 2] = dir ? r : g;
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -210,7 +210,7 @@ Jimp.prototype.colorShift2 = function colorShift2(dir, cb) {
 		b = (dir ? r : g) & 0xFF;
 		data[i] = (a << 24) + (r << 16) + (g << 8) + (b);
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -261,7 +261,7 @@ Jimp.prototype.dither8Bit = function dither8Bit(size, cb) {
 			}
 		}
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -326,7 +326,7 @@ Jimp.prototype.ditherAtkinsons = function ditherAtkinsons(cb) {
 			}
 		}
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -382,7 +382,7 @@ Jimp.prototype.ditherBayer = function ditherBayer(map, cb) {
 				}
 			}
 
-			this.bitmap.data = new Buffer(data);
+			this.bitmap.data = Buffer.from(data);
 			if (isNodePattern(cb)) return cb.call(this, null, this);
 			else return this;
 };
@@ -439,7 +439,7 @@ Jimp.prototype.ditherBayer3 = function ditherBayer3(map, cb) {
 							size][y % size] ? 0 : 0xff;
 					}
 				}
-				this.bitmap.data = new Buffer(data);
+				this.bitmap.data = Buffer.from(data);
 				if (isNodePattern(cb)) return cb.call(this, null, this);
 				else return this;
 };
@@ -472,7 +472,7 @@ Jimp.prototype.ditherBitmask = function ditherBitmask(mask, cb) {
 		data[i + 2] |= M;
 	}
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -528,7 +528,7 @@ Jimp.prototype.ditherFloydSteinberg = function ditherFloydSteinberg(cb) {
 			}
 		}
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -610,7 +610,7 @@ Jimp.prototype.ditherHalftone = function ditherHalftone(cb) {
 		}
 	}
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -628,7 +628,7 @@ Jimp.prototype.ditherRandom = function ditherRandom(cb) {
 		val = scaled < randRound(128) ? 0 : 0xff;
 		data[i] = data[i + 1] = data[i + 2] = val;
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 
@@ -648,7 +648,7 @@ Jimp.prototype.ditherRandom3 = function ditherRandom3(cb) {
 		data[i + 2] = data[i + 2] < randRound(128) ? 0 : 0xff;
 	}
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -679,7 +679,7 @@ Jimp.prototype.drumrollHorizontal = function drumrollHorizontal(cb) {
 		}
 	}
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -711,7 +711,7 @@ Jimp.prototype.drumrollHorizontalWave = function drumrollHorizontalWave(cb) {
 		}
 	}
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -742,7 +742,7 @@ Jimp.prototype.drumrollVertical = function drumrollVertical(cb) {
 		}
 	}
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -774,7 +774,7 @@ Jimp.prototype.drumrollVerticalWave = function drumrollVerticalWave(cb) {
 		}
 	}
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -793,7 +793,7 @@ Jimp.prototype.dumbSortRows = function dumbsSortRows(cb) {
 		data.set(da, i);
 	}
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -866,7 +866,7 @@ Jimp.prototype.fractal = function fractal(type, cb) {
 			}
 			break;
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -937,7 +937,7 @@ Jimp.prototype.fractalGhosts = function fractalGhosts(type, color, cb) {
 			}
 			break;
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1039,7 +1039,7 @@ Jimp.prototype.greenShift = function greenShift(factor, cb) {
 		data[i + 1] = (shift) > 255 ? 255 : shift;
 		data[i + 2] -= factor;
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1055,7 +1055,7 @@ Jimp.prototype.inverse = function inverse(cb) {
 	for (var i = 0; i < data.length; i++) {
 		data[i] = ~ data[i] | 0xFF000000;
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1124,7 +1124,7 @@ Jimp.prototype.pixelSort = function pixelSort(cb) {
 		}
 	}
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1203,7 +1203,7 @@ Jimp.prototype.randomSortRows = function randomSortRows(cb) {
 		Array.prototype.sort.call(da, coinToss);
 		data.set(da, i);
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1229,7 +1229,7 @@ Jimp.prototype.redShift = function redShift(factor, cb) {
 		data[i + 1] -= factor;
 		data[i + 2] -= factor;
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1284,7 +1284,7 @@ Jimp.prototype.rgb_glitch = function rgb_glitch(offset, rgb, dir, cb) {
 				}
 		}
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1375,7 +1375,7 @@ Jimp.prototype.rgbShift = function rgbShift(from, to, factor, cb) {
 		data[i + to] = (shift) > 255 ? 255 : shift;
 	}
 	// your code here
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1413,7 +1413,7 @@ Jimp.prototype.scanlines = function scanlines(type, size, option, cb) {
 		data.set(row, i);
 	}
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1447,7 +1447,7 @@ Jimp.prototype.selectSlice = function selectSlice(selection, cb) {
 	}
 	var cut = data.subarray(cutstart, cutend);
 	data.set(cut, randFloor((width * height * 4) - cut.length));
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1480,7 +1480,7 @@ Jimp.prototype.shortdumbsort = function shortdumbsort(start, end, cb) {
 		Array.prototype.sort.call(da);
 		console.log('data length:', data.length, 'offset', mm[0], 'size', mm[0] + da.length);
 		data.set(da, mm[0]);
-		this.bitmap.data = new Buffer(data);
+		this.bitmap.data = Buffer.from(data);
 	} catch (err) {
 		console.error(err);
 	}
@@ -1516,7 +1516,7 @@ Jimp.prototype.shortsort = function shortsort(dir, start, end, cb) {
 		Array.prototype.sort.call(cut, rightSort);
 	}
 
-	this.bitmap.data = new Buffer(data.buffer);
+	this.bitmap.data = Buffer.from(data.buffer);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1547,7 +1547,7 @@ Jimp.prototype.slice = function slice(cutstart, cutend, cb) {
 	var cut = data.subarray(cutstart, cutend);
 	console.log('slice::\ncut: %s, start: %s, end: %s', cut.length, cutstart, cutend);
 	data.set(cut, randFloor((width * height * 4) - cut.length) || 0);
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1585,7 +1585,7 @@ Jimp.prototype.slicesort = function slicesort(dir, start, end, cb) {
 	}
 	data.set(data.buffer, coinToss() ? offset : mm[0]);
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1606,7 +1606,7 @@ Jimp.prototype.sort = function sort(dir, cb) {
 		Array.prototype.sort.call(data, rightSort);
 	}
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1625,7 +1625,7 @@ Jimp.prototype.sortRows = function sortRows(cb) {
 		da.copyWithin(data, i);
 	}
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1660,7 +1660,7 @@ Jimp.prototype.sortStripe = function sortStripe(dir, start, end, cb) {
 		da.copyWithin(data, i + mm[0]);
 	}
 
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1733,7 +1733,7 @@ Jimp.prototype.superShift = function superShift(iter, dir, cb) {
 				data[j + 2] = dir ? r : g;
 		}
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
@@ -1769,7 +1769,7 @@ Jimp.prototype.superSlice = function superSlice(iter, cb) {
 		var cut = data.subarray(cutstart, cutend);
 		data.set(cut, randFloor((width * height * 4) - cut.length));
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };

@@ -19,7 +19,7 @@ Jimp.prototype.colorShift2 = function colorShift2(dir, cb) {
 		b = (dir ? r : g) & 0xFF;
 		data[i] = (a << 24) + (r << 16) + (g << 8) + (b);
 	}
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };

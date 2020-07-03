@@ -25,7 +25,7 @@ Jimp.prototype.shortdumbsort = function shortdumbsort(start, end, cb) {
 		Array.prototype.sort.call(da);
 		console.log('data length:', data.length, 'offset', mm[0], 'size', mm[0] + da.length);
 		data.set(da, mm[0]);
-		this.bitmap.data = new Buffer(data);
+		this.bitmap.data = Buffer.from(data);
 	} catch (err) {
 		console.error(err);
 	}

@@ -49,7 +49,7 @@ Jimp.prototype.ditherBayer3 = function ditherBayer3(map, cb) {
 							size][y % size] ? 0 : 0xff;
 					}
 				}
-				this.bitmap.data = new Buffer(data);
+				this.bitmap.data = Buffer.from(data);
 				if (isNodePattern(cb)) return cb.call(this, null, this);
 				else return this;
 };

@@ -27,7 +27,7 @@ Jimp.prototype.selectSlice = function selectSlice(selection, cb) {
 	}
 	var cut = data.subarray(cutstart, cutend);
 	data.set(cut, randFloor((width * height * 4) - cut.length));
-	this.bitmap.data = new Buffer(data);
+	this.bitmap.data = Buffer.from(data);
 	if (isNodePattern(cb)) return cb.call(this, null, this);
 	else return this;
 };
